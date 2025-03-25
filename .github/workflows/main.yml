@@ -18,3 +18,15 @@ jobs:
             fetch-depth: 1
       - name: Echo
         run: echo "Image klappt"
+  MXNET170_v0-0-1:
+    runs-on: ubuntu-latest
+    container: 
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet170:v0.0.1
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+            fetch-depth: 1
+      - name: Echo
+        run: echo "Image klappt"
