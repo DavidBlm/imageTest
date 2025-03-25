@@ -1,0 +1,19 @@
+name: mxnet170test
+on:
+  push:
+  workflow_dispatch:
+concurrency:
+  group: "${{ github.ref }}"
+  cancel-in-progress: true
+jobs:
+  runs-on: ubuntu-latest
+  container: 
+    image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet170:v0.0.2
+  timeout-minutes: 60
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+          fetch-depth: 1
+    - name: Echo
+      run: echo "Image klappt"
