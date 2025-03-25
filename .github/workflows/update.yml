@@ -48,6 +48,8 @@ jobs:
       image: ghcr.io/davidblm/mxnet190_update:0.0.2
     timeout-minutes: 60
     steps:
+      - run: node -v
+      - run: nvm current
       - name: Checkout
         uses: actions/checkout@v4
         with:
