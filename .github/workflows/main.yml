@@ -12,6 +12,7 @@ jobs:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet170:v0.0.2
     timeout-minutes: 60
     steps:
+      - run: cat /etc/os-release
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -24,6 +25,7 @@ jobs:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
     timeout-minutes: 60
     steps:
+      - run: cat /etc/os-release
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -36,6 +38,7 @@ jobs:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/tensorflow
     timeout-minutes: 60
     steps:
+      - run: cat /etc/os-release
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -48,6 +51,7 @@ jobs:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
     timeout-minutes: 60
     steps:
+      - run: cat /etc/os-release
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -60,6 +64,7 @@ jobs:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/tensorflow-onnx:latest
     timeout-minutes: 60
     steps:
+      - run: cat /etc/os-release
       - name: Checkout
         uses: actions/checkout@v4
         with:
