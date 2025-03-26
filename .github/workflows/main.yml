@@ -136,7 +136,8 @@ jobs:
 
       - name: Manually Clone Repo
         run: |
-          git clone https://github.com/${{ github.repository }}.git .
+          git clone https://github.com/${{ github.repository }}.git repo
+          cd repo
           git checkout ${{ github.sha }}  # Checkout the exact commit
           ls
 
