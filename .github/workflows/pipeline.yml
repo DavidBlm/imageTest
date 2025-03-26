@@ -33,7 +33,6 @@ jobs:
           echo "Created train.h5 in $dir"
           done
       - name: Script
-        shell: bash
         run: |
           cd repo
           cd tensorflow
@@ -65,7 +64,6 @@ jobs:
           echo "Created train.h5 in $dir"
           done
       - name: Script
-        shell: bash
         run: |
           cd repo
           python3 -m pip install -U pip
@@ -97,7 +95,6 @@ jobs:
           echo "Created train.h5 in $dir"
           done
       - name: Script
-        shell: bash
         run: |
           cd repo
           cd emadl-maven-plugin
@@ -117,7 +114,7 @@ jobs:
             emadl-maven-plugin/output/*
 
   TestModularModels:
-    needs: [ DeployMnistCalcArtifact , TestGluonONNX, TrainTensorflowONNX, TestMavenStreamtestPlugin, TrainOperator_MnistCalculator, TrainOperator_MnistCalculatorTL, TestMnistWithAdaNet, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainHexadecimal_MnistCalculator, TestTENSORFLOW, DeployDecompositionResNetArtifact, TestEMADLMavenPlugin]
+    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculatorTL, TestMavenStreamtestPlugin, DeployDecompositionResNetArtifact, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TestMnistWithAdaNet, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestGluonONNX, TestTENSORFLOW]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -138,7 +135,6 @@ jobs:
           echo "Created train.h5 in $dir"
           done
       - name: Script
-        shell: bash
         run: |
           cd repo
           apt update && apt install -y libomp-dev
@@ -159,7 +155,7 @@ jobs:
             mnist-modular/Streamtest/output/*
 
   TestDecomposition:
-    needs: [ DeployMnistCalcArtifact , TestGluonONNX, TrainTensorflowONNX, TestMavenStreamtestPlugin, TrainOperator_MnistCalculator, TrainOperator_MnistCalculatorTL, TestMnistWithAdaNet, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainHexadecimal_MnistCalculator, TestTENSORFLOW, DeployDecompositionResNetArtifact, TestEMADLMavenPlugin]
+    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculatorTL, TestMavenStreamtestPlugin, DeployDecompositionResNetArtifact, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TestMnistWithAdaNet, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestGluonONNX, TestTENSORFLOW]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -180,7 +176,6 @@ jobs:
           echo "Created train.h5 in $dir"
           done
       - name: Script
-        shell: bash
         run: |
           cd repo
           export TZ=Europe/Berlin && apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata
@@ -234,7 +229,6 @@ jobs:
           path: |
             emadl-maven-plugin/output/*
       - name: Script
-        shell: bash
         run: |
           cd repo
           export TZ=Europe/Berlin
@@ -248,7 +242,7 @@ jobs:
           mvn dependency:resolve emadl:train -s settings.xml -U
 
   TestTransfer:
-    needs: [ DeployMnistCalcArtifact , TestGluonONNX, TrainTensorflowONNX, TestMavenStreamtestPlugin, TrainOperator_MnistCalculator, TrainOperator_MnistCalculatorTL, TestMnistWithAdaNet, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainHexadecimal_MnistCalculator, TestTENSORFLOW, DeployDecompositionResNetArtifact, TestEMADLMavenPlugin]
+    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculatorTL, TestMavenStreamtestPlugin, DeployDecompositionResNetArtifact, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TestMnistWithAdaNet, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestGluonONNX, TestTENSORFLOW]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -269,7 +263,6 @@ jobs:
           echo "Created train.h5 in $dir"
           done
       - name: Script
-        shell: bash
         run: |
           cd repo
           export TZ=Europe/Berlin
@@ -305,7 +298,6 @@ jobs:
           echo "Created train.h5 in $dir"
           done
       - name: Script
-        shell: bash
         run: |
           cd repo
           mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
@@ -381,7 +373,6 @@ jobs:
           echo "Created train.h5 in $dir"
           done
       - name: Script
-        shell: bash
         run: |
           cd repo
           cd onnx/tensorflow-pretrained
@@ -425,7 +416,6 @@ jobs:
           path: |
             onnx/tensorflow-pretrained/model/
       - name: Script
-        shell: bash
         run: |
           cd repo
           mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
@@ -468,7 +458,6 @@ jobs:
           echo "Created train.h5 in $dir"
           done
       - name: Script
-        shell: bash
         run: |
           cd repo
           cd "emadl-maven_hexadecimal_calculator/trained_mnist_calc"
@@ -501,7 +490,6 @@ jobs:
           path: |
             emadl-maven-plugin/output/*
       - name: Script
-        shell: bash
         run: |
           cd repo
           export TZ=Europe/Berlin
@@ -537,7 +525,6 @@ jobs:
           echo "Created train.h5 in $dir"
           done
       - name: Script
-        shell: bash
         run: |
           cd repo
           cd "emadl-maven_hexadecimal_calculator"
@@ -572,7 +559,6 @@ jobs:
           echo "Created train.h5 in $dir"
           done
       - name: Script
-        shell: bash
         run: |
           cd repo
           cd "emadl-maven_hexadecimal_calculator_transfer_learning"
@@ -608,7 +594,6 @@ jobs:
           echo "Created train.h5 in $dir"
           done
       - name: Script
-        shell: bash
         run: |
           cd repo
           cd "emadl-maven_operator_calculator"
@@ -642,7 +627,6 @@ jobs:
           echo "Created train.h5 in $dir"
           done
       - name: Script
-        shell: bash
         run: |
           cd repo
           cd "emadl-maven_operator_calculator_transfer_learning"
