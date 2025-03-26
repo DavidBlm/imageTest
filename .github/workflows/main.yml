@@ -136,9 +136,9 @@ jobs:
 
       - name: Manually Clone Repo
         run: |
-          git clone https://github.com/${{ github.repository }}.git
-          cd $(basename ${{ github.repository }})
+          git clone https://github.com/${{ github.repository }}.git $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE
           git checkout ${{ github.sha }}  # Checkout the exact commit
 
       - name: Verify Repo
-        run: ls -la $(basename ${{ github.repository }})
+        run: ls
