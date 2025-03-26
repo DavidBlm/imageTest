@@ -124,3 +124,21 @@ jobs:
       #      fetch-depth: 1
       - name: Echo
         run: echo "Image klappt"
+
+  CheckoutTest2:
+    runs-on: ubuntu-latest
+    container: 
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/tensorflow
+    timeout-minutes: 60
+    steps:
+      - name: Install Git (if not available)
+        run: sudo apt-get install -y git
+
+      - name: Manually Clone Repo
+        run: |
+          git clone https://github.com/${{ github.repository }}.git
+          cd $(basename ${{ github.repository }})
+          git checkout ${{ github.sha }}  # Checkout the exact commit
+
+      - name: Verify Repo
+        run: ls -la $(basename ${{ github.repository }})
