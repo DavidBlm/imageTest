@@ -141,4 +141,7 @@ jobs:
           git checkout ${{ github.sha }}  # Checkout the exact commit
 
       - name: Verify Repo
-        run: ls
+        run: |
+              ls
+              cd $GITHUB_WORKSPACE
+              ls
