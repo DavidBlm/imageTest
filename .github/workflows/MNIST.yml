@@ -1,0 +1,450 @@
+name: import.test/mnistcalculator
+on:
+  push:
+  workflow_dispatch:
+concurrency:
+  group: "${{ github.ref }}"
+  cancel-in-progress: true
+env:
+  GitlabToken: ${{ secrets.GitlabToken }}
+  URL: ${{ secrets.URL }}
+  ID: ${{ secrets.ID }}
+  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+jobs:
+  DeployMnistCalcArtifact:
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.6-jdk-8
+    timeout-minutes: 60
+    steps:
+    - uses: actions/checkout@v4.1.0
+      with:
+        repository: DavidBlm/MNISTPipeline
+        token: ${{ secrets.ACCESS_TOKEN }}
+        fetch-depth: 0
+    - name: Concatenate training files in their respective directories
+      run: |
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done
+    - run: |
+           cd emadl-maven_hexadecimal_calculator
+           ls -l
+           cd trained_mnist_calc
+           ls -l
+           #Bloat in the repository
+           #mvn deploy -s ci_settings.xml
+           
+  TestEMADLMavenPlugin:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/davidblm/mxnet190_update:0.0.2
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4.1.0
+        with:
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - name: Concatenate training files in their respective directories
+        run: |
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done
+      -  run: |
+            
+            cd emadl-maven-plugin
+            python3 -m pip install -U pip
+            python3 -m pip install scikit-image
+            python3 -m pip install opencv-python
+            mvn dependency:resolve emadl:train -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml -U
+            mkdir output
+            python3 calculator.py
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: "${{ github.job }}"
+          retention-days: 7
+          path: emadl-maven-plugin/output/*
+
+  TrainTensorflowONNX:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/davidblm/tensorflow-onnx:latest
+    if: ${{!(github.ref == 'refs/heads/modular_testing')}}
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4.1.0
+        with:
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - name: Concatenate training files in their respective directories
+        run: |
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done 
+      - name: Build
+        run: |
+                
+                cd onnx
+                cd tensorflow-pretrained
+                mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
+                mvn dependency:resolve emadl:train -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: "${{ github.job }}"
+          retention-days: 1
+          path: onnx/tensorflow-pretrained/model/
+
+  TestTENSORFLOW:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/davidblm/tensorflow:latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4.1.0
+        with:
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - name: Concatenate training files in their respective directories
+        run: |
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done
+      - name: Build
+        run: |
+                
+                cd tensorflow
+                chmod +x build.sh
+                ./build.sh
+                RES=$(./build/src/cpp/DigitCalculator resources/images/1.png resources/images/2.png resources/images/3.png resources/images/4.png resources/images/5.png resources/images/6.png)
+                echo $RES
+                echo "-------------------------------------------------------"
+                if [[ $RES != *"SUM: 579"* ]]; then echo "Wrong result: $RES"; exit 1; fi
+
+  TestMavenStreamtestPlugin:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/davidblm/mxnet190_update:0.0.2
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4.1.0
+        with:
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - name: Concatenate training files in their respective directories
+        run: |
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done
+           echo env.GitlabToken
+      - name: Build
+        run: |
+                
+                python3 -m pip install -U pip
+                python3 -m pip install scikit-image
+                python3 -m pip install opencv-python
+                cd mnist-calculator
+                mvn streamtest:streamtest-build -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml -e
+
+  TestMnistWithAdaNet:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/davidblm/mxnet170_update:0.0.2
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4.1.0
+        with:
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - name: Concatenate training files in their respective directories
+        run: |
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done
+          
+      - name: Build
+        #mvn clean install -Dmaven.wagon.http.retryHandler.count=5
+        run: |
+                
+                mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
+                cd AdaNet                 
+                mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
+                mvn dependency:resolve emadl:train -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml
+
+  TestMNISTwithCustomLayer:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/davidblm/mxnet170_update:0.0.2
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4.1.0
+        with:
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - name: Concatenate training files in their respective directories
+        run: |
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done
+      - name: Build
+        run: |
+              
+              shopt -s expand_aliases
+              echo 'alias python='\''/usr/bin/python3'\''' >> ~/.bashrc
+              . ~/.bashrc
+              cat ~/.bashrc
+              echo $PYTHONPATH
+              python --version
+              python3 --version
+              which python
+              which python3
+              alias python=/usr/bin/python3
+              python --version
+              python3 --version
+              which python
+              type -a python
+              mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
+              cd mnist-custom-layer
+              mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
+              mvn dependency:resolve emadl:train -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml
+  
+  TestGluonONNX:
+    needs: TrainTensorflowONNX
+    runs-on: ubuntu-latest
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170-onnx:v0.0.1
+    if: ${{!(github.ref == 'refs/heads/modular_testing')}}
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4.1.0
+        with:
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: TrainTensorflowONNX 
+          path: onnx/tensorflow-pretrained/model/
+      - run: |
+             cd onnx/tensorflow-pretrained/model/cNNCalculator.Network/
+             ls
+      - name: Concatenate training files in their respective directories
+        run: |
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done
+      - name: Build
+        run: |
+                
+                mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
+                python3 -m pip install -U pip
+                python3 -m pip install scikit-image
+                python3 -m pip install opencv-python
+                cd onnx/tensorflow-pretrained
+                python3 -m pip install -U pip
+                python3 -m pip install scikit-image
+                python3 -m pip install opencv-python
+                ls model/cNNCalculator.Network/
+                mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
+                mvn emadl:install-pretrained -e -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s ./settings.xml
+                cd ../gluon-load
+                mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
+                mvn emadl:train -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml
+                chmod +x build.sh
+                ./build.sh
+                RES=$(./build/src/cpp/DigitCalculator resources/images/1.png resources/images/2.png resources/images/3.png resources/images/4.png resources/images/5.png resources/images/6.png)
+                echo $RES
+                if [[ $RES != *"SUM: 579"* ]]; then echo "Wrong result:" $RES; exit 1; fi;
+
+  DeployDecompositionResNetArtifact:
+    needs: TestEMADLMavenPlugin
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/davidblm/mxnet190_update:0.0.2
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4.1.0
+        with:
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - name: Concatenate training files in their respective directories
+        run: |
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done
+      - name: Build
+        run: |
+                
+                export TZ=Europe/Berlin
+                apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata libomp-dev libopencv-dev python3-opencv
+                ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+                dpkg-reconfigure --frontend noninteractive tzdata
+                python3 -m pip install --upgrade pip
+                python3 -m pip install scikit-image opencv-python
+                ln -fs /usr/bin/python3 /usr/bin/python
+                cd mnist-modular/DecompositionResNetExport
+                mvn dependency:resolve -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml -U -f pom_build.xml
+                mvn emadl:train -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml -U -f pom_build.xml
+
+
+
+  TrainHexadecimal_MnistCalculator:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/davidblm/mxnet190_update:0.0.2
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4.1.0
+        with:
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - name: Concatenate training files in their respective directories
+        run: |
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done
+      - name: Build
+        run: |
+                
+                cd "emadl-maven_hexadecimal_calculator"
+                python3 -m pip install -U pip
+                python3 -m pip install scikit-image
+                python3 -m pip install opencv-python
+                python3 -m pip install --upgrade mxnet==1.9.1 #Necessary?
+                echo "$PWD"
+                cd src/main/emadl/calculator
+                ls
+                cd ../../../..
+                mvn dependency:resolve emadl:train -s settings.xml -U -e
+  TrainHexadecimal_MnistCalculatorTL:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/davidblm/mxnet190_update:0.0.2
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4.1.0
+        with:
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - name: Concatenate training files in their respective directories
+        run: |
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done
+      - name: Build
+        run: |
+                
+                cd "emadl-maven_hexadecimal_calculator_transfer_learning"
+                python3 -m pip install -U pip
+                python3 -m pip install scikit-image
+                python3 -m pip install opencv-python
+                echo "$PWD"
+                mvn dependency:resolve -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml -U
+                mvn clean verify -s settings.xml -U
+                mvn emadl:train -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml -U
+                mkdir output
+                python3 calculator.py
+  TrainOperator_MnistCalculator:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/davidblm/mxnet190_update:0.0.2
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4.1.0
+        with:
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - name: Concatenate training files in their respective directories
+        run: |
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done
+      - name: Build
+        run: |
+                
+                cd "emadl-maven_operator_calculator"
+                python3 -m pip install -U pip
+                python3 -m pip install scikit-image
+                python3 -m pip install opencv-python
+                echo "$PWD"
+                mvn dependency:resolve emadl:train -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml -U
+                mkdir output
+                python3 calculator.py
+  TrainOperator_MnistCalculatorTL:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/davidblm/mxnet190_update:0.0.2
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4.1.0
+        with:
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - name: Concatenate training files in their respective directories
+        run: |
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done
+      - name: Build
+        run: |
+                
+                cd "emadl-maven_operator_calculator_transfer_learning"
+                python3 -m pip install -U pip
+                python3 -m pip install scikit-image
+                python3 -m pip install opencv-python
+                echo "$PWD"
+                mvn dependency:resolve -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml -U
+                mvn clean verify -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml -U
+                mvn emadl:train -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml -U
+                mkdir output
+                python3 calculator.py
+
