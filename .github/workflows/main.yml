@@ -139,9 +139,10 @@ jobs:
           git clone https://github.com/${{ github.repository }}.git $GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE
           git checkout ${{ github.sha }}  # Checkout the exact commit
+          ls
 
       - name: Verify Repo
         run: |
-              ls
-              cd $GITHUB_WORKSPACE
-              ls
+          ls
+          cd $GITHUB_WORKSPACE
+          ls
