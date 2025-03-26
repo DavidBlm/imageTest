@@ -26,6 +26,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -57,6 +58,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -88,6 +90,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -114,7 +117,7 @@ jobs:
             emadl-maven-plugin/output/*
 
   TestModularModels:
-    needs: [ DeployMnistCalcArtifact , TrainTensorflowONNX, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMavenStreamtestPlugin, TestMnistWithAdaNet, TestGluonONNX, TrainOperator_MnistCalculator, TestMNISTwithCustomLayer, TestTENSORFLOW, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculatorTL]
+    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculator, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TestGluonONNX, TrainOperator_MnistCalculatorTL, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TrainTensorflowONNX, DeployDecompositionResNetArtifact, TestMNISTwithCustomLayer, TestMnistWithAdaNet, TestMavenStreamtestPlugin]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -128,6 +131,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -155,7 +159,7 @@ jobs:
             mnist-modular/Streamtest/output/*
 
   TestDecomposition:
-    needs: [ DeployMnistCalcArtifact , TrainTensorflowONNX, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMavenStreamtestPlugin, TestMnistWithAdaNet, TestGluonONNX, TrainOperator_MnistCalculator, TestMNISTwithCustomLayer, TestTENSORFLOW, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculatorTL]
+    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculator, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TestGluonONNX, TrainOperator_MnistCalculatorTL, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TrainTensorflowONNX, DeployDecompositionResNetArtifact, TestMNISTwithCustomLayer, TestMnistWithAdaNet, TestMavenStreamtestPlugin]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -169,6 +173,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -216,6 +221,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -242,7 +248,7 @@ jobs:
           mvn dependency:resolve emadl:train -s settings.xml -U
 
   TestTransfer:
-    needs: [ DeployMnistCalcArtifact , TrainTensorflowONNX, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMavenStreamtestPlugin, TestMnistWithAdaNet, TestGluonONNX, TrainOperator_MnistCalculator, TestMNISTwithCustomLayer, TestTENSORFLOW, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculatorTL]
+    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculator, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TestGluonONNX, TrainOperator_MnistCalculatorTL, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TrainTensorflowONNX, DeployDecompositionResNetArtifact, TestMNISTwithCustomLayer, TestMnistWithAdaNet, TestMavenStreamtestPlugin]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -256,6 +262,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -291,6 +298,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -320,6 +328,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -361,6 +370,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -403,6 +413,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -449,6 +460,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -475,6 +487,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -501,6 +514,7 @@ jobs:
           mvn dependency:resolve -s settings.xml -U -f pom_build.xml
           mvn emadl:train -s settings.xml -U -f pom_build.xml
 
+
   TrainHexadecimal_MnistCalculator:
     needs: DeployMnistCalcArtifact
     runs-on: ubuntu-latest
@@ -516,6 +530,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -550,6 +565,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -585,6 +601,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
@@ -618,6 +635,7 @@ jobs:
       - name: Restore large files
         run: |
           cd repo
+          ls
           find . -type f -name '*.part*' | while read part; do
           echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
