@@ -29,7 +29,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Script
@@ -60,7 +60,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Script
@@ -91,7 +91,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Script
@@ -131,7 +131,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Script
@@ -172,7 +172,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Script
@@ -219,7 +219,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Download artifacts
@@ -259,7 +259,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Script
@@ -294,7 +294,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Script
@@ -323,7 +323,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Script
@@ -364,7 +364,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Start Docker Container
@@ -406,7 +406,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Download artifacts
@@ -452,7 +452,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Script
@@ -478,7 +478,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Download artifacts
@@ -519,7 +519,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Script
@@ -553,7 +553,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Script
@@ -588,7 +588,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Script
@@ -621,7 +621,7 @@ jobs:
           ls
           find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
-          (cd "$dir" & & cat train_ * > train.h5)
+          (cd "$dir" && cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
           done
       - name: Script
