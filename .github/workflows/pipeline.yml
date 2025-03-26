@@ -348,7 +348,7 @@ jobs:
           echo $PYTHONPATH
           python --version
           python3 --version
-          pip install numpy
+          python3 -m pip install numpy
           which python
           which python3
           alias python=/usr/bin/python3
