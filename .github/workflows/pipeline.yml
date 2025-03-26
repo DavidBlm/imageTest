@@ -1,0 +1,574 @@
+name: TEST
+on:
+  push:
+  workflow_dispatch:
+concurrency:
+  group: "${{ github.ref }}"
+  cancel-in-progress: true
+env:
+  GitlabToken: ${ secrets.GitlabToken }
+  URL: ${ secrets.URL }
+  ID: ${ secrets.ID }
+jobs:
+  TestTENSORFLOW:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/modular_testing'
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/tensorflow
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Script
+        run: |
+          cd repo
+          cd tensorflow
+          chmod +x build.sh
+          ./build.sh
+          RES=$(./build/src/cpp/DigitCalculator resources/images/1.png resources/images/2.png resources/images/3.png resources/images/4.png resources/images/5.png resources/images/6.png)
+          if [[ $RES != *"SUM: 579"* ]]; then echo "Wrong result:" $RES; exit 1; fi;
+
+  TestMavenStreamtestPlugin:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/modular_testing'
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Script
+        run: |
+          cd repo
+          python3 -m pip install -U pip
+          python3 -m pip install scikit-image
+          python3 -m pip install opencv-python
+          cd mnist-calculator
+          mvn streamtest:streamtest-build -s settings.xml
+
+  TestEMADLMavenPlugin:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/modular_testing'
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Script
+        run: |
+          cd repo
+          cd emadl-maven-plugin
+          python3 -m pip install -U pip
+          python3 -m pip install scikit-image
+          python3 -m pip install opencv-python
+          mvn dependency:resolve emadl:train -s settings.xml -U
+          mkdir output
+          python3 calculator.py
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: "${ github.job }"
+          retention-days: 7
+          path: |
+            emadl-maven-plugin/output/*
+
+  TestModularModels:
+    needs: [ DeployMnistCalcArtifact , TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculator, TestGluonONNX, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestEMADLMavenPlugin, TrainOperator_MnistCalculatorTL]
+    runs-on: ubuntu-latest
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Script
+        run: |
+          cd repo
+          apt update && apt install -y libomp-dev
+          cd mnist-modular/Streamtest
+          python3 -m pip install -U pip
+          python3 -m pip install scikit-image
+          python3 -m pip install opencv-python
+          mvn dependency:resolve emadl:train -s settings.xml -U
+          mkdir output
+          python3 calculator.py
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: "${ github.job }"
+          retention-days: 7
+          path: |
+            mnist-modular/Streamtest/output/*
+
+  TestDecomposition:
+    needs: [ DeployMnistCalcArtifact , TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculator, TestGluonONNX, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestEMADLMavenPlugin, TrainOperator_MnistCalculatorTL]
+    runs-on: ubuntu-latest
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Script
+        run: |
+          cd repo
+          export TZ=Europe/Berlin && apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata
+          apt update && apt install -y libomp-dev libopencv-dev python3-opencv
+          ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+          dpkg-reconfigure --frontend noninteractive tzdata
+          python3 -m pip install -U pip
+          python3 -m pip install scikit-image
+          python3 -m pip install opencv-python
+          ln /usr/bin/python3 /usr/bin/python -f
+          cd mnist-modular/Streamtest
+          mvn dependency:resolve -s settings.xml -U
+          cd ../Decomposition
+          ./runDecomposition.sh
+          STATUS=$?
+          if [[ $STATUS -eq 1 ]]; then echo "Error during decomposition." $RES; exit 1; fi;
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: "${ github.job }"
+          retention-days: 7
+          path: |
+            mnist-modular/Streamtest/output/*
+
+  TestDecompositionResNet:
+    needs: TestEMADLMavenPlugin
+    runs-on: ubuntu-latest
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${ github.job }
+          path: |
+            emadl-maven-plugin/output/*
+      - name: Script
+        run: |
+          cd repo
+          export TZ=Europe/Berlin
+          apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata libomp-dev libopencv-dev python3-opencv
+          ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+          dpkg-reconfigure --frontend noninteractive tzdata
+          python3 -m pip install --upgrade pip
+          python3 -m pip install scikit-image opencv-python
+          ln -fs /usr/bin/python3 /usr/bin/python
+          cd mnist-modular/DecompositionResNet
+          mvn dependency:resolve emadl:train -s settings.xml -U
+
+  TestTransfer:
+    needs: [ DeployMnistCalcArtifact , TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculator, TestGluonONNX, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestEMADLMavenPlugin, TrainOperator_MnistCalculatorTL]
+    runs-on: ubuntu-latest
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Script
+        run: |
+          cd repo
+          export TZ=Europe/Berlin
+          apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata libomp-dev libopencv-dev python3-opencv
+          ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+          dpkg-reconfigure --frontend noninteractive tzdata
+          python3 -m pip install -U pip scikit-image opencv-python
+          ln -fs /usr/bin/python3 /usr/bin/python
+          cd transfer
+          chmod +x runTransfer.sh
+          ./runTransfer.sh
+
+  TestMnistWithAdaNet:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/modular_testing'
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Script
+        run: |
+          cd repo
+          mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
+          cd AdaNet
+          mvn dependency:resolve emadl:train -s settings.xml
+
+  TestMNISTwithCustomLayer:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/modular_testing'
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Script
+        run: |
+          cd repo
+          shopt -s expand_aliases
+          echo 'alias python='\''/usr/bin/python3'\''' >> ~/.bashrc
+          . ~/.bashrc
+          cat ~/.bashrc
+          echo $PYTHONPATH
+          python --version
+          python3 --version
+          which python
+          which python3
+          alias python=/usr/bin/python3
+          python --version
+          python3 --version
+          which python
+          type -a python
+          mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
+          cd mnist-custom-layer
+          mvn dependency:resolve emadl:train -s settings.xml
+
+  TrainTensorflowONNX:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/modular_testing'
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/tensorflow-onnx:latest
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/tensorflow-onnx:latest tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            cd onnx/tensorflow-pretrained
+            mvn dependency:resolve emadl:train -s settings.xml
+        run: docker exec build-container bash -c "$SCRIPT"
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: "${ github.job }"
+          retention-days: 7
+          path: |
+            onnx/tensorflow-pretrained/model/
+
+  TestGluonONNX:
+    needs: TrainTensorflowONNX
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/modular_testing'
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170-onnx:v0.0.1
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${ github.job }
+          path: |
+            onnx/tensorflow-pretrained/model/
+      - name: Script
+        run: |
+          cd repo
+          mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
+          python3 -m pip install -U pip
+          python3 -m pip install scikit-image
+          python3 -m pip install opencv-python
+          cd onnx/tensorflow-pretrained
+          python3 -m pip install -U pip
+          python3 -m pip install scikit-image
+          python3 -m pip install opencv-python
+          ls model/cNNCalculator.Network/
+          mvn emadl:install-pretrained -e -s ./settings.xml
+          cd ../gluon-load
+          mvn emadl:train -s settings.xml
+          chmod +x build.sh
+          ./build.sh
+          RES=$(./build/src/cpp/DigitCalculator resources/images/1.png resources/images/2.png resources/images/3.png resources/images/4.png resources/images/5.png resources/images/6.png)
+          if [[ $RES != *"SUM: 579"* ]]; then echo "Wrong result:" $RES; exit 1; fi;
+
+  DeployMnistCalcArtifact:
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.6-jdk-8
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Script
+        run: |
+          cd repo
+          cd "emadl-maven_hexadecimal_calculator/trained_mnist_calc"
+          mvn deploy -s ci_settings.xml
+
+  DeployDecompositionResNetArtifact:
+    needs: TestEMADLMavenPlugin
+    runs-on: ubuntu-latest
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${ github.job }
+          path: |
+            emadl-maven-plugin/output/*
+      - name: Script
+        run: |
+          cd repo
+          export TZ=Europe/Berlin
+          apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata libomp-dev libopencv-dev python3-opencv
+          ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+          dpkg-reconfigure --frontend noninteractive tzdata
+          python3 -m pip install --upgrade pip
+          python3 -m pip install scikit-image opencv-python
+          ln -fs /usr/bin/python3 /usr/bin/python
+          cd mnist-modular/DecompositionResNetExport
+          mvn dependency:resolve -s settings.xml -U -f pom_build.xml
+          mvn emadl:train -s settings.xml -U -f pom_build.xml
+          mvn deploy -s settings.xml -U -f pom_deploy.xml
+
+  TrainHexadecimal_MnistCalculator:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Script
+        run: |
+          cd repo
+          cd "emadl-maven_hexadecimal_calculator"
+          python3 -m pip install -U pip
+          python3 -m pip install scikit-image
+          python3 -m pip install opencv-python
+          echo "$PWD"
+          cd src/main/emadl/calculator
+          ls
+          cd ../../../..
+          mvn dependency:resolve emadl:train -s settings.xml -U
+
+  TrainHexadecimal_MnistCalculatorTL:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Script
+        run: |
+          cd repo
+          cd "emadl-maven_hexadecimal_calculator_transfer_learning"
+          python3 -m pip install -U pip
+          python3 -m pip install scikit-image
+          python3 -m pip install opencv-python
+          echo "$PWD"
+          mvn dependency:resolve  -s settings.xml -U
+          mvn clean verify -s settings.xml -U
+          mvn emadl:train -s settings.xml -U
+          mkdir output
+          python3 calculator.py
+
+  TrainOperator_MnistCalculator:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Script
+        run: |
+          cd repo
+          cd "emadl-maven_operator_calculator"
+          python3 -m pip install -U pip
+          python3 -m pip install scikit-image
+          python3 -m pip install opencv-python
+          echo "$PWD"
+          mvn dependency:resolve emadl:train -s settings.xml -U
+          mkdir output
+          python3 calculator.py
+
+  TrainOperator_MnistCalculatorTL:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+      - name: Restore large files
+        run: |
+          find . -type f -name '*.part*' | while read part; do
+          base=$(echo "$part" | sed 's/.part.*//')
+          cat "$part" >> "$base"
+          rm "$part"
+          done
+      - name: Script
+        run: |
+          cd repo
+          cd "emadl-maven_operator_calculator_transfer_learning"
+          python3 -m pip install -U pip
+          python3 -m pip install scikit-image
+          python3 -m pip install opencv-python
+          echo "$PWD"
+          mvn dependency:resolve  -s settings.xml -U
+          mvn clean verify -s settings.xml -U
+          mvn emadl:train -s settings.xml -U
+          mkdir output
+          python3 calculator.py
+
