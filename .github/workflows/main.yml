@@ -113,7 +113,7 @@ jobs:
           REPO_URL: https://github.com/DavidBlm/MNISTPipeline
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
-          git clone https://$GITHUB_TOKEN@github.com/DavidBlm/MNISTPipeline
+          git clone https://$GITHUB_TOKEN@github.com/DavidBlm/MNISTPipeline repository
           cd repository
           git fetch origin +refs/heads/*:refs/remotes/origin/*
           git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
