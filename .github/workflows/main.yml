@@ -97,3 +97,30 @@ jobs:
             fetch-depth: 1
       - name: Echo
         run: echo "Image klappt"
+  CheckoutTest:
+    runs-on: ubuntu-latest
+    container: 
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/tensorflow
+    timeout-minutes: 60
+    steps:
+      - run: cat /etc/os-release
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Clone repository
+        env:
+          REPO_URL: https://github.com/DavidBlm/MNISTPipeline
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          git clone https://$GITHUB_TOKEN@github.com/DavidBlm/MNISTPipeline
+          cd repository
+          git fetch origin +refs/heads/*:refs/remotes/origin/*
+          git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
+          ls
+      #- name: Checkout
+      #  uses: actions/checkout@v4
+      #  with:
+      #      fetch-depth: 1
+      - name: Echo
+        run: echo "Image klappt"
