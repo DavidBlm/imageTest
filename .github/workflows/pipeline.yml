@@ -102,6 +102,16 @@ jobs:
           python3 -m pip install scikit-image
           python3 -m pip install opencv-python
           mvn dependency:resolve emadl:train -s settings.xml -U
+          cd /github/home/.m2/repository/de/monticore/lang/monticar/
+          ls
+          cd /github/home/.m2/repository/de/monticore/lang/monticar/datasets/mnist/
+          ls
+          cd /github/home/.m2/repository/de/monticore/lang/monticar/datasets/mnist/1/
+          ls
+          cd /github/home/.m2/repository/de/monticore/lang/monticar/datasets/mnist/1/mnist-1-dataset/
+          ls
+          cd /github/home/.m2/repository/de/monticore/lang/monticar/datasets/mnist/1/mnist-1-dataset/training_data/
+          ls
           mkdir output
           python3 calculator.py
       - name: Upload artifacts
@@ -338,6 +348,7 @@ jobs:
           echo $PYTHONPATH
           python --version
           python3 --version
+          pip install numpy
           which python
           which python3
           alias python=/usr/bin/python3
