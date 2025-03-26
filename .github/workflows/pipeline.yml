@@ -678,6 +678,6 @@ jobs:
           pwd
           ls
           cd repo
-          ls
+          python3 -m pip install -U pip 
           pip list
                 
