@@ -447,7 +447,8 @@ jobs:
                 mvn emadl:train -Dmaven.wagon.http.connectionTimeout=60000000 -Dmaven.wagon.http.readTimeout=120000000 -Dmaven.wagon.http.retryHandler.count=50 -s settings.xml -U
                 mkdir output
                 python3 calculator.py
-  WhereAmI:
+
+  where:
     needs: DeployMnistCalcArtifact
     runs-on: ubuntu-latest
     container:
@@ -467,7 +468,7 @@ jobs:
            echo "Created train.h5 in $dir"
            done
       - name: Build
-          run: |
+        run: |
           pwd
           ls
           cd repo
