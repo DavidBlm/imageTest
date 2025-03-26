@@ -36,6 +36,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           cd tensorflow
           chmod +x build.sh
           ./build.sh
@@ -68,6 +70,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           python3 -m pip install -U pip
           python3 -m pip install scikit-image
           python3 -m pip install opencv-python
@@ -100,6 +104,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           cd emadl-maven-plugin
           python3 -m pip install -U pip
           python3 -m pip install scikit-image
@@ -117,7 +123,7 @@ jobs:
             emadl-maven-plugin/output/*
 
   TestModularModels:
-    needs: [ DeployMnistCalcArtifact , TestEMADLMavenPlugin, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestGluonONNX, TestTENSORFLOW, TestMNISTwithCustomLayer, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator, TrainOperator_MnistCalculatorTL, TestMnistWithAdaNet, TestMavenStreamtestPlugin]
+    needs: [ DeployMnistCalcArtifact , TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestMavenStreamtestPlugin, TestTENSORFLOW, TrainOperator_MnistCalculatorTL, TrainTensorflowONNX, TestGluonONNX, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TestEMADLMavenPlugin, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculator]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -141,6 +147,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           apt update && apt install -y libomp-dev
           cd mnist-modular/Streamtest
           python3 -m pip install -U pip
@@ -159,7 +167,7 @@ jobs:
             mnist-modular/Streamtest/output/*
 
   TestDecomposition:
-    needs: [ DeployMnistCalcArtifact , TestEMADLMavenPlugin, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestGluonONNX, TestTENSORFLOW, TestMNISTwithCustomLayer, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator, TrainOperator_MnistCalculatorTL, TestMnistWithAdaNet, TestMavenStreamtestPlugin]
+    needs: [ DeployMnistCalcArtifact , TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestMavenStreamtestPlugin, TestTENSORFLOW, TrainOperator_MnistCalculatorTL, TrainTensorflowONNX, TestGluonONNX, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TestEMADLMavenPlugin, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculator]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -183,6 +191,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           export TZ=Europe/Berlin && apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata
           apt update && apt install -y libomp-dev libopencv-dev python3-opencv
           ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
@@ -237,6 +247,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           export TZ=Europe/Berlin
           apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata libomp-dev libopencv-dev python3-opencv
           ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
@@ -248,7 +260,7 @@ jobs:
           mvn dependency:resolve emadl:train -s settings.xml -U
 
   TestTransfer:
-    needs: [ DeployMnistCalcArtifact , TestEMADLMavenPlugin, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestGluonONNX, TestTENSORFLOW, TestMNISTwithCustomLayer, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator, TrainOperator_MnistCalculatorTL, TestMnistWithAdaNet, TestMavenStreamtestPlugin]
+    needs: [ DeployMnistCalcArtifact , TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestMavenStreamtestPlugin, TestTENSORFLOW, TrainOperator_MnistCalculatorTL, TrainTensorflowONNX, TestGluonONNX, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TestEMADLMavenPlugin, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculator]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -272,6 +284,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           export TZ=Europe/Berlin
           apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata libomp-dev libopencv-dev python3-opencv
           ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
@@ -308,6 +322,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
           cd AdaNet
           mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
@@ -339,6 +355,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           shopt -s expand_aliases
           echo 'alias python='\''/usr/bin/python3'\''' >> ~/.bashrc
           . ~/.bashrc
@@ -384,6 +402,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           cd onnx/tensorflow-pretrained
           mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
           mvn dependency:resolve emadl:train -s settings.xml
@@ -428,6 +448,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
           python3 -m pip install -U pip
           python3 -m pip install scikit-image
@@ -471,6 +493,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           cd "emadl-maven_hexadecimal_calculator/trained_mnist_calc"
 
   DeployDecompositionResNetArtifact:
@@ -504,6 +528,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           export TZ=Europe/Berlin
           apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata libomp-dev libopencv-dev python3-opencv
           ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
@@ -540,6 +566,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           cd "emadl-maven_hexadecimal_calculator"
           python3 -m pip install -U pip
           python3 -m pip install scikit-image
@@ -575,6 +603,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           cd "emadl-maven_hexadecimal_calculator_transfer_learning"
           python3 -m pip install -U pip
           python3 -m pip install scikit-image
@@ -611,6 +641,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           cd "emadl-maven_operator_calculator"
           python3 -m pip install -U pip
           python3 -m pip install scikit-image
@@ -645,6 +677,8 @@ jobs:
         shell: bash
         run: |
           cd repo
+          sudo apt-get update
+          sudo apt-get uprade -y
           cd "emadl-maven_operator_calculator_transfer_learning"
           python3 -m pip install -U pip
           python3 -m pip install scikit-image
