@@ -21,6 +21,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -50,6 +52,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -79,6 +83,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -108,7 +114,7 @@ jobs:
             emadl-maven-plugin/output/*
 
   TestModularModels:
-    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TrainTensorflowONNX, TrainOperator_MnistCalculator, TestGluonONNX, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculatorTL, TrainOperator_MnistCalculatorTL, TestMNISTwithCustomLayer, TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculator, DeployDecompositionResNetArtifact, TestMnistWithAdaNet]
+    needs: [ DeployMnistCalcArtifact , TrainTensorflowONNX, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMavenStreamtestPlugin, TestMnistWithAdaNet, TestGluonONNX, TrainOperator_MnistCalculator, TestMNISTwithCustomLayer, TestTENSORFLOW, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculatorTL]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -117,6 +123,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -147,7 +155,7 @@ jobs:
             mnist-modular/Streamtest/output/*
 
   TestDecomposition:
-    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TrainTensorflowONNX, TrainOperator_MnistCalculator, TestGluonONNX, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculatorTL, TrainOperator_MnistCalculatorTL, TestMNISTwithCustomLayer, TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculator, DeployDecompositionResNetArtifact, TestMnistWithAdaNet]
+    needs: [ DeployMnistCalcArtifact , TrainTensorflowONNX, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMavenStreamtestPlugin, TestMnistWithAdaNet, TestGluonONNX, TrainOperator_MnistCalculator, TestMNISTwithCustomLayer, TestTENSORFLOW, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculatorTL]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -156,6 +164,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -201,6 +211,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -230,7 +242,7 @@ jobs:
           mvn dependency:resolve emadl:train -s settings.xml -U
 
   TestTransfer:
-    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TrainTensorflowONNX, TrainOperator_MnistCalculator, TestGluonONNX, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculatorTL, TrainOperator_MnistCalculatorTL, TestMNISTwithCustomLayer, TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculator, DeployDecompositionResNetArtifact, TestMnistWithAdaNet]
+    needs: [ DeployMnistCalcArtifact , TrainTensorflowONNX, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMavenStreamtestPlugin, TestMnistWithAdaNet, TestGluonONNX, TrainOperator_MnistCalculator, TestMNISTwithCustomLayer, TestTENSORFLOW, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculatorTL]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -239,6 +251,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -272,6 +286,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -299,6 +315,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -338,6 +356,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -378,6 +398,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -422,6 +444,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -436,7 +460,6 @@ jobs:
           cd repo
           cd "emadl-maven_hexadecimal_calculator/trained_mnist_calc"
 
-
   DeployDecompositionResNetArtifact:
     needs: TestEMADLMavenPlugin
     runs-on: ubuntu-latest
@@ -447,6 +470,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -476,7 +501,6 @@ jobs:
           mvn dependency:resolve -s settings.xml -U -f pom_build.xml
           mvn emadl:train -s settings.xml -U -f pom_build.xml
 
-
   TrainHexadecimal_MnistCalculator:
     needs: DeployMnistCalcArtifact
     runs-on: ubuntu-latest
@@ -487,6 +511,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -519,6 +545,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -552,6 +580,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
@@ -583,6 +613,8 @@ jobs:
       - name: Checkout latest commit
         run: |
           git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Restore large files
         run: |
           cd repo
