@@ -6,9 +6,9 @@ concurrency:
   group: "${{ github.ref }}"
   cancel-in-progress: true
 env:
-  GitlabToken: ${ secrets.GitlabToken }
-  URL: ${ secrets.URL }
-  ID: ${ secrets.ID }
+  GitlabToken : ${{ secrets.GitlabToken}}
+  URL : ${{ secrets.URL}}
+  ID : ${{ secrets.ID}}
 jobs:
   TestTENSORFLOW:
     needs: DeployMnistCalcArtifact
@@ -102,7 +102,7 @@ jobs:
             emadl-maven-plugin/output/*
 
   TestModularModels:
-    needs: [ DeployMnistCalcArtifact , TestGluonONNX, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TrainTensorflowONNX, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestTENSORFLOW, TestMavenStreamtestPlugin]
+    needs: [ DeployMnistCalcArtifact , TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TestMavenStreamtestPlugin, TrainTensorflowONNX, TestGluonONNX, TrainOperator_MnistCalculatorTL, DeployDecompositionResNetArtifact, TestTENSORFLOW, TrainHexadecimal_MnistCalculator, TestEMADLMavenPlugin, TestMnistWithAdaNet, TrainOperator_MnistCalculator]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -139,7 +139,7 @@ jobs:
             mnist-modular/Streamtest/output/*
 
   TestDecomposition:
-    needs: [ DeployMnistCalcArtifact , TestGluonONNX, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TrainTensorflowONNX, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestTENSORFLOW, TestMavenStreamtestPlugin]
+    needs: [ DeployMnistCalcArtifact , TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TestMavenStreamtestPlugin, TrainTensorflowONNX, TestGluonONNX, TrainOperator_MnistCalculatorTL, DeployDecompositionResNetArtifact, TestTENSORFLOW, TrainHexadecimal_MnistCalculator, TestEMADLMavenPlugin, TestMnistWithAdaNet, TrainOperator_MnistCalculator]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -218,7 +218,7 @@ jobs:
           mvn dependency:resolve emadl:train -s settings.xml -U
 
   TestTransfer:
-    needs: [ DeployMnistCalcArtifact , TestGluonONNX, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TrainTensorflowONNX, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestTENSORFLOW, TestMavenStreamtestPlugin]
+    needs: [ DeployMnistCalcArtifact , TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TestMavenStreamtestPlugin, TrainTensorflowONNX, TestGluonONNX, TrainOperator_MnistCalculatorTL, DeployDecompositionResNetArtifact, TestTENSORFLOW, TrainHexadecimal_MnistCalculator, TestEMADLMavenPlugin, TestMnistWithAdaNet, TrainOperator_MnistCalculator]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
