@@ -27,11 +27,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Script
         run: |
@@ -59,11 +58,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Script
         run: |
@@ -91,11 +89,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Script
         run: |
@@ -117,7 +114,7 @@ jobs:
             emadl-maven-plugin/output/*
 
   TestModularModels:
-    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculator, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TestGluonONNX, TrainOperator_MnistCalculatorTL, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TrainTensorflowONNX, DeployDecompositionResNetArtifact, TestMNISTwithCustomLayer, TestMnistWithAdaNet, TestMavenStreamtestPlugin]
+    needs: [ DeployMnistCalcArtifact , TestEMADLMavenPlugin, TrainOperator_MnistCalculatorTL, TrainOperator_MnistCalculator, TrainTensorflowONNX, TestMavenStreamtestPlugin, TestMNISTwithCustomLayer, DeployDecompositionResNetArtifact, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestGluonONNX, TestMnistWithAdaNet, TrainHexadecimal_MnistCalculator]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -132,11 +129,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Script
         run: |
@@ -159,7 +155,7 @@ jobs:
             mnist-modular/Streamtest/output/*
 
   TestDecomposition:
-    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculator, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TestGluonONNX, TrainOperator_MnistCalculatorTL, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TrainTensorflowONNX, DeployDecompositionResNetArtifact, TestMNISTwithCustomLayer, TestMnistWithAdaNet, TestMavenStreamtestPlugin]
+    needs: [ DeployMnistCalcArtifact , TestEMADLMavenPlugin, TrainOperator_MnistCalculatorTL, TrainOperator_MnistCalculator, TrainTensorflowONNX, TestMavenStreamtestPlugin, TestMNISTwithCustomLayer, DeployDecompositionResNetArtifact, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestGluonONNX, TestMnistWithAdaNet, TrainHexadecimal_MnistCalculator]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -174,11 +170,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Script
         run: |
@@ -222,11 +217,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -248,7 +242,7 @@ jobs:
           mvn dependency:resolve emadl:train -s settings.xml -U
 
   TestTransfer:
-    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculator, TestEMADLMavenPlugin, TrainHexadecimal_MnistCalculator, TestGluonONNX, TrainOperator_MnistCalculatorTL, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TrainTensorflowONNX, DeployDecompositionResNetArtifact, TestMNISTwithCustomLayer, TestMnistWithAdaNet, TestMavenStreamtestPlugin]
+    needs: [ DeployMnistCalcArtifact , TestEMADLMavenPlugin, TrainOperator_MnistCalculatorTL, TrainOperator_MnistCalculator, TrainTensorflowONNX, TestMavenStreamtestPlugin, TestMNISTwithCustomLayer, DeployDecompositionResNetArtifact, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestGluonONNX, TestMnistWithAdaNet, TrainHexadecimal_MnistCalculator]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -263,11 +257,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Script
         run: |
@@ -299,11 +292,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Script
         run: |
@@ -329,11 +321,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Script
         run: |
@@ -371,11 +362,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Start Docker Container
         run: |
@@ -414,11 +404,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -461,11 +450,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Script
         run: |
@@ -488,11 +476,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -514,7 +501,6 @@ jobs:
           mvn dependency:resolve -s settings.xml -U -f pom_build.xml
           mvn emadl:train -s settings.xml -U -f pom_build.xml
 
-
   TrainHexadecimal_MnistCalculator:
     needs: DeployMnistCalcArtifact
     runs-on: ubuntu-latest
@@ -531,11 +517,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Script
         run: |
@@ -566,11 +551,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Script
         run: |
@@ -602,11 +586,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Script
         run: |
@@ -636,11 +619,10 @@ jobs:
         run: |
           cd repo
           ls
-          find . -type f -name '*.part*' | while read part; do
-          echo "Restoring $part"
-          base=$(echo "$part" | sed 's/.part.*//')
-          cat "$part" >> "$base"
-          rm "$part"
+          find. - type f - name 'train_*' | while read file; do
+          dir =$(dirname "$file")
+          (cd "$dir" & & cat train_ * > train.h5)
+          echo"Created train.h5 in $dir"
           done
       - name: Script
         run: |
