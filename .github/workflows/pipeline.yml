@@ -351,6 +351,7 @@ jobs:
           echo $PYTHONPATH
           python --version
           python3 --version
+          python3 -m pip install numpy h5py
           which python
           which python3
           alias python=/usr/bin/python3
