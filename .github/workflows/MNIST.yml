@@ -448,3 +448,30 @@ jobs:
                 mkdir output
                 python3 calculator.py
 
+WhereAmI:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/davidblm/mxnet190_update:0.0.2
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4.1.0
+        with:
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+          fetch-depth: 0
+      - name: Concatenate training files in their respective directories
+        run: |
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done
+      - name: Build
+          run: |
+          pwd
+          ls
+          cd repo
+          ls
+          pip list
+                
