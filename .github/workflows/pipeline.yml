@@ -657,7 +657,7 @@ jobs:
   where:
     runs-on: ubuntu-latest
     container:
-      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
     timeout-minutes: 60
     steps:
       - name: Checkout latest commit
