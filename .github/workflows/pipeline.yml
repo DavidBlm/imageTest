@@ -20,11 +20,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -48,11 +49,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -76,11 +78,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -105,7 +108,7 @@ jobs:
             emadl-maven-plugin/output/*
 
   TestModularModels:
-    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculatorTL, TrainOperator_MnistCalculator, TrainTensorflowONNX, TestTENSORFLOW, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMnistWithAdaNet, TestMNISTwithCustomLayer, TestEMADLMavenPlugin, DeployDecompositionResNetArtifact, TestMavenStreamtestPlugin, TestGluonONNX]
+    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculatorTL, TestMavenStreamtestPlugin, TestGluonONNX, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator, TestMNISTwithCustomLayer, TestMnistWithAdaNet, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestEMADLMavenPlugin]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -113,11 +116,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -143,7 +147,7 @@ jobs:
             mnist-modular/Streamtest/output/*
 
   TestDecomposition:
-    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculatorTL, TrainOperator_MnistCalculator, TrainTensorflowONNX, TestTENSORFLOW, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMnistWithAdaNet, TestMNISTwithCustomLayer, TestEMADLMavenPlugin, DeployDecompositionResNetArtifact, TestMavenStreamtestPlugin, TestGluonONNX]
+    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculatorTL, TestMavenStreamtestPlugin, TestGluonONNX, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator, TestMNISTwithCustomLayer, TestMnistWithAdaNet, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestEMADLMavenPlugin]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -151,11 +155,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -195,11 +200,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -224,7 +230,7 @@ jobs:
           mvn dependency:resolve emadl:train -s settings.xml -U
 
   TestTransfer:
-    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculatorTL, TrainOperator_MnistCalculator, TrainTensorflowONNX, TestTENSORFLOW, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMnistWithAdaNet, TestMNISTwithCustomLayer, TestEMADLMavenPlugin, DeployDecompositionResNetArtifact, TestMavenStreamtestPlugin, TestGluonONNX]
+    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculatorTL, TestMavenStreamtestPlugin, TestGluonONNX, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator, TestMNISTwithCustomLayer, TestMnistWithAdaNet, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestEMADLMavenPlugin]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -232,11 +238,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -264,11 +271,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -290,11 +298,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -328,11 +337,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -367,11 +377,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -410,11 +421,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -434,11 +446,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -473,11 +486,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -504,11 +518,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -536,11 +551,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
@@ -566,11 +582,12 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.GITHUB_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           cd repo
           find . -type f -name '*.part*' | while read part; do
+          echo "Restoring $part"
           base=$(echo "$part" | sed 's/.part.*//')
           cat "$part" >> "$base"
           rm "$part"
