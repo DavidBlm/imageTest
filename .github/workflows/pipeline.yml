@@ -27,7 +27,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -58,7 +58,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -89,7 +89,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -114,7 +114,7 @@ jobs:
             emadl-maven-plugin/output/*
 
   TestModularModels:
-    needs: [ DeployMnistCalcArtifact , TestMavenStreamtestPlugin, DeployDecompositionResNetArtifact, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestMNISTwithCustomLayer, TrainTensorflowONNX, TestGluonONNX, TrainOperator_MnistCalculator, TestEMADLMavenPlugin, TestMnistWithAdaNet, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculatorTL]
+    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TrainHexadecimal_MnistCalculatorTL, TestEMADLMavenPlugin, TestMNISTwithCustomLayer, TrainOperator_MnistCalculator, TestMnistWithAdaNet, TestGluonONNX, TrainTensorflowONNX, DeployDecompositionResNetArtifact, TestMavenStreamtestPlugin, TrainOperator_MnistCalculatorTL, TrainHexadecimal_MnistCalculator]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -129,7 +129,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -155,7 +155,7 @@ jobs:
             mnist-modular/Streamtest/output/*
 
   TestDecomposition:
-    needs: [ DeployMnistCalcArtifact , TestMavenStreamtestPlugin, DeployDecompositionResNetArtifact, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestMNISTwithCustomLayer, TrainTensorflowONNX, TestGluonONNX, TrainOperator_MnistCalculator, TestEMADLMavenPlugin, TestMnistWithAdaNet, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculatorTL]
+    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TrainHexadecimal_MnistCalculatorTL, TestEMADLMavenPlugin, TestMNISTwithCustomLayer, TrainOperator_MnistCalculator, TestMnistWithAdaNet, TestGluonONNX, TrainTensorflowONNX, DeployDecompositionResNetArtifact, TestMavenStreamtestPlugin, TrainOperator_MnistCalculatorTL, TrainHexadecimal_MnistCalculator]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -170,7 +170,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -217,7 +217,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -242,7 +242,7 @@ jobs:
           mvn dependency:resolve emadl:train -s settings.xml -U
 
   TestTransfer:
-    needs: [ DeployMnistCalcArtifact , TestMavenStreamtestPlugin, DeployDecompositionResNetArtifact, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestMNISTwithCustomLayer, TrainTensorflowONNX, TestGluonONNX, TrainOperator_MnistCalculator, TestEMADLMavenPlugin, TestMnistWithAdaNet, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculatorTL]
+    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TrainHexadecimal_MnistCalculatorTL, TestEMADLMavenPlugin, TestMNISTwithCustomLayer, TrainOperator_MnistCalculator, TestMnistWithAdaNet, TestGluonONNX, TrainTensorflowONNX, DeployDecompositionResNetArtifact, TestMavenStreamtestPlugin, TrainOperator_MnistCalculatorTL, TrainHexadecimal_MnistCalculator]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -257,7 +257,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -292,7 +292,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -321,7 +321,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -362,7 +362,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -404,7 +404,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -450,7 +450,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -477,7 +477,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -502,7 +502,6 @@ jobs:
           mvn dependency:resolve -s settings.xml -U -f pom_build.xml
           mvn emadl:train -s settings.xml -U -f pom_build.xml
 
-
   TrainHexadecimal_MnistCalculator:
     needs: DeployMnistCalcArtifact
     runs-on: ubuntu-latest
@@ -519,7 +518,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -553,7 +552,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -588,7 +587,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
@@ -621,7 +620,7 @@ jobs:
         run: |
           cd repo
           ls
-          find . - type f -name 'train_*' | while read file; do
+          find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
           (cd "$dir" && cat train_* > train.h5)
           echo "Created train.h5 in $dir"
