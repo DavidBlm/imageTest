@@ -27,7 +27,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -58,7 +58,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -89,7 +89,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -129,7 +129,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -170,7 +170,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -217,7 +217,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -257,7 +257,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -292,7 +292,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -321,7 +321,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -362,7 +362,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -404,7 +404,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -450,7 +450,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -476,7 +476,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -517,7 +517,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -551,7 +551,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -586,7 +586,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
@@ -619,7 +619,7 @@ jobs:
         run: |
           cd repo
           ls
-          find. - type f - name 'train_*' | while read file; do
+          find . - type f - name 'train_*' | while read file; do
           dir =$(dirname "$file")
           (cd "$dir" & & cat train_ * > train.h5)
           echo"Created train.h5 in $dir"
