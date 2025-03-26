@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -47,7 +47,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -74,7 +74,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -102,7 +102,7 @@ jobs:
             emadl-maven-plugin/output/*
 
   TestModularModels:
-    needs: [ DeployMnistCalcArtifact , TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculator, TestGluonONNX, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestEMADLMavenPlugin, TrainOperator_MnistCalculatorTL]
+    needs: [ DeployMnistCalcArtifact , TestGluonONNX, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TrainTensorflowONNX, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestTENSORFLOW, TestMavenStreamtestPlugin]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -110,7 +110,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -139,7 +139,7 @@ jobs:
             mnist-modular/Streamtest/output/*
 
   TestDecomposition:
-    needs: [ DeployMnistCalcArtifact , TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculator, TestGluonONNX, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestEMADLMavenPlugin, TrainOperator_MnistCalculatorTL]
+    needs: [ DeployMnistCalcArtifact , TestGluonONNX, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TrainTensorflowONNX, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestTENSORFLOW, TestMavenStreamtestPlugin]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -147,7 +147,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -190,7 +190,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -218,7 +218,7 @@ jobs:
           mvn dependency:resolve emadl:train -s settings.xml -U
 
   TestTransfer:
-    needs: [ DeployMnistCalcArtifact , TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculatorTL, TestTENSORFLOW, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculator, TestGluonONNX, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestEMADLMavenPlugin, TrainOperator_MnistCalculatorTL]
+    needs: [ DeployMnistCalcArtifact , TestGluonONNX, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculator, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TrainTensorflowONNX, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestTENSORFLOW, TestMavenStreamtestPlugin]
     runs-on: ubuntu-latest
     container:
       image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
@@ -226,7 +226,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -257,7 +257,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -282,7 +282,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -319,7 +319,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -357,7 +357,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -399,7 +399,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -422,7 +422,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -460,7 +460,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -490,7 +490,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -521,7 +521,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
@@ -550,7 +550,7 @@ jobs:
     steps:
       - name: Checkout latest commit
         run: |
-          git clone --depth 1 https://${github.REPOSITORY_OWNER}:${ secrets.ACCESS_TOKEN }@github.com/DavidBlm/MNISTPipeline repo
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
       - name: Restore large files
         run: |
           find . -type f -name '*.part*' | while read part; do
