@@ -162,3 +162,22 @@ jobs:
           ls
           cd repo
           ls
+
+
+  CheckoutTest4:
+    runs-on: ubuntu-latest
+    container: 
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/tensorflow
+    timeout-minutes: 60
+    steps:
+      - name: Manually Clone Repo
+        run: |
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
+
+      - name: Verify Repo
+        run: |
+          ls
+          cd repo
+          ls
