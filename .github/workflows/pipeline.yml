@@ -655,19 +655,19 @@ jobs:
           python3 calculator.py
 
   where:
-    needs: DeployMnistCalcArtifact
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/davidblm/mxnet190_update:0.0.2
+      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4.1.0
-        with:
-          repository: DavidBlm/MNISTPipeline
-          token: ${{ secrets.ACCESS_TOKEN }}
-          fetch-depth: 0
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
       - name: Concatenate training files in their respective directories
         run: |
+           cd repo
            find . -type f -name 'train_*' | while read file; do
            dir=$(dirname "$file")
            (cd "$dir" && cat train_* > train.h5)
