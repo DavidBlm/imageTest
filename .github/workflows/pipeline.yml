@@ -435,8 +435,7 @@ jobs:
         run: |
           cd repo
           cd "emadl-maven_hexadecimal_calculator/trained_mnist_calc"
-          mvn deploy -s ci_settings.xml
-
+          
   DeployDecompositionResNetArtifact:
     needs: TestEMADLMavenPlugin
     runs-on: ubuntu-latest
@@ -475,7 +474,7 @@ jobs:
           cd mnist-modular/DecompositionResNetExport
           mvn dependency:resolve -s settings.xml -U -f pom_build.xml
           mvn emadl:train -s settings.xml -U -f pom_build.xml
-          mvn deploy -s settings.xml -U -f pom_deploy.xml
+  
 
   TrainHexadecimal_MnistCalculator:
     needs: DeployMnistCalcArtifact
