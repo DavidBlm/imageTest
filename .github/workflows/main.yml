@@ -32,19 +32,6 @@ jobs:
             fetch-depth: 1
       - name: Echo
         run: echo "Image klappt"
-  TENSORFLOW:
-    runs-on: ubuntu-latest
-    container: 
-      image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/tensorflow
-    timeout-minutes: 60
-    steps:
-      - run: cat /etc/os-release
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-            fetch-depth: 1
-      - name: Echo
-        run: echo "Image klappt"
   MXNET190_v0-0-2:
     runs-on: ubuntu-latest
     container: 
