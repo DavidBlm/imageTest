@@ -23,7 +23,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -59,7 +58,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -95,7 +94,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -140,7 +139,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -186,7 +185,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -238,7 +237,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -283,7 +282,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -323,7 +322,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -358,7 +357,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -407,7 +406,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -449,7 +448,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -504,7 +503,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -513,7 +512,7 @@ jobs:
           done
       - name: Script
         run: |
-          cd repo
+          
           cd "emadl-maven_hexadecimal_calculator/trained_mnist_calc"
 
   DeployDecompositionResNetArtifact:
@@ -529,7 +528,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -575,7 +574,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -614,7 +613,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -654,7 +653,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -692,7 +691,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          cd repo
+          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
