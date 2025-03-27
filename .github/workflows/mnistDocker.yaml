@@ -33,7 +33,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/tensorflow
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/tensorflow tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/tensorflow tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -68,7 +68,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -103,7 +103,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -126,7 +126,7 @@ jobs:
             emadl-maven-plugin/output/*
 
   TestModularModels:
-    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TestMnistWithAdaNet, TestEMADLMavenPlugin, TestGluonONNX, TestMavenStreamtestPlugin, TrainOperator_MnistCalculatorTL, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator]
+    needs: [ DeployMnistCalcArtifact , TestMNISTwithCustomLayer, TestMavenStreamtestPlugin, TestGluonONNX, TrainHexadecimal_MnistCalculatorTL, TrainOperator_MnistCalculatorTL, TestTENSORFLOW, TrainOperator_MnistCalculator, DeployDecompositionResNetArtifact, TrainHexadecimal_MnistCalculator, TestEMADLMavenPlugin, TestMnistWithAdaNet, TrainTensorflowONNX]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -147,7 +147,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -171,7 +171,7 @@ jobs:
             mnist-modular/Streamtest/output/*
 
   TestDecomposition:
-    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TestMnistWithAdaNet, TestEMADLMavenPlugin, TestGluonONNX, TestMavenStreamtestPlugin, TrainOperator_MnistCalculatorTL, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator]
+    needs: [ DeployMnistCalcArtifact , TestMNISTwithCustomLayer, TestMavenStreamtestPlugin, TestGluonONNX, TrainHexadecimal_MnistCalculatorTL, TrainOperator_MnistCalculatorTL, TestTENSORFLOW, TrainOperator_MnistCalculator, DeployDecompositionResNetArtifact, TrainHexadecimal_MnistCalculator, TestEMADLMavenPlugin, TestMnistWithAdaNet, TrainTensorflowONNX]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -192,7 +192,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -249,7 +249,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -266,7 +266,7 @@ jobs:
         run: docker exec build-container bash -c "$SCRIPT"
 
   TestTransfer:
-    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TestMnistWithAdaNet, TestEMADLMavenPlugin, TestGluonONNX, TestMavenStreamtestPlugin, TrainOperator_MnistCalculatorTL, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator]
+    needs: [ DeployMnistCalcArtifact , TestMNISTwithCustomLayer, TestMavenStreamtestPlugin, TestGluonONNX, TrainHexadecimal_MnistCalculatorTL, TrainOperator_MnistCalculatorTL, TestTENSORFLOW, TrainOperator_MnistCalculator, DeployDecompositionResNetArtifact, TrainHexadecimal_MnistCalculator, TestEMADLMavenPlugin, TestMnistWithAdaNet, TrainTensorflowONNX]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -287,7 +287,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -326,7 +326,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -360,7 +360,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -408,7 +408,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/tensorflow-onnx:latest
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/tensorflow-onnx:latest tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/tensorflow-onnx:latest tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -455,7 +455,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170-onnx:v0.0.1
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170-onnx:v0.0.1 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170-onnx:v0.0.1 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -533,7 +533,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -572,7 +572,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -610,7 +610,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -649,7 +649,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -686,7 +686,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e GitlabToken=${{secrets.GitlabToken} -e URL=${{secrets.URL} -e ID=${{secrets.ID} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
