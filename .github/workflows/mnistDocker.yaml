@@ -1,5 +1,6 @@
-name: MNISTManual
+name: TEST
 on:
+  push:
   workflow_dispatch:
 concurrency:
   group: "${{ github.ref }}"
@@ -32,7 +33,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/tensorflow
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/tensorflow tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/tensorflow tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -58,7 +59,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -68,7 +68,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -94,7 +94,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -104,7 +103,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -127,7 +126,7 @@ jobs:
             emadl-maven-plugin/output/*
 
   TestModularModels:
-    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TestMavenStreamtestPlugin, TestMNISTwithCustomLayer, TrainHexadecimal_MnistCalculatorTL, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculator, TestGluonONNX, TrainTensorflowONNX, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TestMnistWithAdaNet, DeployDecompositionResNetArtifact]
+    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TestMnistWithAdaNet, TestEMADLMavenPlugin, TestGluonONNX, TestMavenStreamtestPlugin, TrainOperator_MnistCalculatorTL, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -139,7 +138,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -149,7 +147,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -173,7 +171,7 @@ jobs:
             mnist-modular/Streamtest/output/*
 
   TestDecomposition:
-    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TestMavenStreamtestPlugin, TestMNISTwithCustomLayer, TrainHexadecimal_MnistCalculatorTL, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculator, TestGluonONNX, TrainTensorflowONNX, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TestMnistWithAdaNet, DeployDecompositionResNetArtifact]
+    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TestMnistWithAdaNet, TestEMADLMavenPlugin, TestGluonONNX, TestMavenStreamtestPlugin, TrainOperator_MnistCalculatorTL, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -185,7 +183,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -195,7 +192,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -237,7 +234,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -253,7 +249,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -270,7 +266,7 @@ jobs:
         run: docker exec build-container bash -c "$SCRIPT"
 
   TestTransfer:
-    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TestMavenStreamtestPlugin, TestMNISTwithCustomLayer, TrainHexadecimal_MnistCalculatorTL, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculator, TestGluonONNX, TrainTensorflowONNX, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TestMnistWithAdaNet, DeployDecompositionResNetArtifact]
+    needs: [ DeployMnistCalcArtifact , TestTENSORFLOW, TrainHexadecimal_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TestMnistWithAdaNet, TestEMADLMavenPlugin, TestGluonONNX, TestMavenStreamtestPlugin, TrainOperator_MnistCalculatorTL, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -282,7 +278,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -292,7 +287,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -322,7 +317,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -332,7 +326,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -357,7 +351,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -367,7 +360,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -406,7 +399,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -416,7 +408,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/tensorflow-onnx:latest
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/tensorflow-onnx:latest tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/tensorflow-onnx:latest tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -448,7 +440,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -464,7 +455,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170-onnx:v0.0.1
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170-onnx:v0.0.1 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170-onnx:v0.0.1 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -503,7 +494,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -512,7 +502,7 @@ jobs:
           done
       - name: Script
         run: |
-          
+          cd repo
           cd "emadl-maven_hexadecimal_calculator/trained_mnist_calc"
 
   DeployDecompositionResNetArtifact:
@@ -528,7 +518,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -544,7 +533,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -574,7 +563,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -584,7 +572,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -613,7 +601,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -623,7 +610,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -653,7 +640,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -663,7 +649,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -691,7 +677,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
       - name: Restore large files
         run: |
-          
           ls
           find . -type f -name 'train_*' | while read file; do
           dir=$(dirname "$file")
@@ -701,7 +686,7 @@ jobs:
       - name: Start Docker Container
         run: |
           docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
-          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${secrets.URL}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+          docker run --name build-container -v $pwd:/workspace --network=host  -e URL=${{secrets.{secret}}}registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
       - name: Script
         env:
           SCRIPT: |
@@ -717,3 +702,4 @@ jobs:
             mkdir output
             python3 calculator.py
         run: docker exec build-container bash -c "$SCRIPT"
+
