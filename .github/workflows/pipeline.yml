@@ -713,4 +713,49 @@ jobs:
                   python3 -m pip install -U pip 
                   pip list
         run: docker exec build-container bash -c "$SCRIPT"
+whereDockerRun:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        run: |
+          git clone --depth 1 https://${{github.REPOSITORY_OWNER}}:${{ secrets.ACCESS_TOKEN }}@github.com/DavidBlm/MNISTPipeline repo
+          cd repo
+          ls
+      - name: Concatenate training files in their respective directories
+        run: |
+           cd repo
+           find . -type f -name 'train_*' | while read file; do
+           dir=$(dirname "$file")
+           (cd "$dir" && cat train_* > train.h5)
+           echo "Created train.h5 in $dir"
+           done
+          
+      - name: Start Docker Container
+        run: |
+             docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
+             docker run --network=host --name build-container -d -v $(pwd)/repo:/workspace -e GitlabToken="${{ secrets.GitlabToken }}" -e URL="${{ secrets.URL }}" -e ID="${{ secrets.ID }}" registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null 
+      - name: Build
+        env:
+          #mvn clean install -Dmaven.wagon.http.retryHandler.count=5
+          SCRIPT: |
+                  cd /workspace
+                  pwd
+                  ls
+                  cd repo
+                  python3 -m pip install -U pip 
+                  pip list
+        run: docker exec build-container bash -c "$SCRIPT"
+      - uses: addnab/docker-run-action@v3
+        with:
+          image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
+          options: -v ${{ github.workspace }}/repo:/workspace -e
+          run: |
+                  cd /workspace
+                  pwd
+                  ls
+                  cd repo
+                  python3 -m pip install -U pip 
+                  pip list
+        
                 
