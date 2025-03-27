@@ -681,7 +681,6 @@ jobs:
           python3 -m pip install -U pip 
           pip list
   whereManual:
-    needs: DeployMnistCalcArtifact
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -702,7 +701,7 @@ jobs:
       - name: Start Docker Container
         run: |
              docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
-             docker run --network=host --name build-container -d -v $(pwd/repo):/workspace -e GitlabToken="${{ secrets.GitlabToken }}" -e URL="${{ secrets.URL }}" -e ID="${{ secrets.ID }}" registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null 
+             docker run --network=host --name build-container -d -v $(pwd)/repo:/workspace -e GitlabToken="${{ secrets.GitlabToken }}" -e URL="${{ secrets.URL }}" -e ID="${{ secrets.ID }}" registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null 
       - name: Build
         env:
           #mvn clean install -Dmaven.wagon.http.retryHandler.count=5
