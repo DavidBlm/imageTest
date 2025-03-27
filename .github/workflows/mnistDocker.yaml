@@ -38,8 +38,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            cd tensorflow
+            cd tensorflow
             chmod +x build.sh
             ./build.sh
             RES=$(./build/src/cpp/DigitCalculator resources/images/1.png resources/images/2.png resources/images/3.png resources/images/4.png resources/images/5.png resources/images/6.png)
