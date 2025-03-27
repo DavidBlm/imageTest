@@ -1,4 +1,4 @@
-name: import.test/mnistcalculator
+name: MNISTupdatedImages
 on:
   push:
   workflow_dispatch:
