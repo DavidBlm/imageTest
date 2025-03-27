@@ -810,6 +810,7 @@ jobs:
           #mvn clean install -Dmaven.wagon.http.retryHandler.count=5
           SCRIPT: |
                 cd /workspace
+                ls
                 echo ${{ secrets.URL }}
                 shopt -s expand_aliases
                 echo 'alias python='\''/usr/bin/python3'\''' >> ~/.bashrc
