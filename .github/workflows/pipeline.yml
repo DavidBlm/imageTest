@@ -761,7 +761,7 @@ jobs:
         - uses: addnab/docker-run-action@v3
           with:
             image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
-            options: -v ${{ github.workspace }}/repo:/workspace
+            options: -v ${{ github.workspace }}/repo:/workspace -e GitlabToken="${{ secrets.GitlabToken }}" -e URL="${{ secrets.URL }}" -e ID="${{ secrets.ID }}"
             run: |
                 cd /workspace
                 shopt -s expand_aliases
