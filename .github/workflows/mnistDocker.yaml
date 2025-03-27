@@ -38,7 +38,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            cd tensorflow
             chmod +x build.sh
             ./build.sh
@@ -74,7 +74,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            python3 -m pip install -U pip
             python3 -m pip install scikit-image
             python3 -m pip install opencv-python
@@ -110,7 +110,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            cd emadl-maven-plugin
             python3 -m pip install -U pip
             python3 -m pip install scikit-image
@@ -129,7 +129,7 @@ jobs:
             emadl-maven-plugin/output/*
 
   TestModularModels:
-    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculator, TestMnistWithAdaNet, TrainTensorflowONNX, TrainHexadecimal_MnistCalculatorTL, TestGluonONNX, TrainHexadecimal_MnistCalculator, DeployDecompositionResNetArtifact, TestMNISTwithCustomLayer, TestTENSORFLOW, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TestMavenStreamtestPlugin]
+    needs: [ DeployMnistCalcArtifact , TestGluonONNX, TrainHexadecimal_MnistCalculatorTL, TestEMADLMavenPlugin, TestMNISTwithCustomLayer, TrainTensorflowONNX, TestMavenStreamtestPlugin, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator, TestTENSORFLOW, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculatorTL]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -155,7 +155,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            apt update && apt install -y libomp-dev
             cd mnist-modular/Streamtest
             python3 -m pip install -U pip
@@ -175,7 +175,7 @@ jobs:
             mnist-modular/Streamtest/output/*
 
   TestDecomposition:
-    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculator, TestMnistWithAdaNet, TrainTensorflowONNX, TrainHexadecimal_MnistCalculatorTL, TestGluonONNX, TrainHexadecimal_MnistCalculator, DeployDecompositionResNetArtifact, TestMNISTwithCustomLayer, TestTENSORFLOW, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TestMavenStreamtestPlugin]
+    needs: [ DeployMnistCalcArtifact , TestGluonONNX, TrainHexadecimal_MnistCalculatorTL, TestEMADLMavenPlugin, TestMNISTwithCustomLayer, TrainTensorflowONNX, TestMavenStreamtestPlugin, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator, TestTENSORFLOW, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculatorTL]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -201,7 +201,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            export TZ=Europe/Berlin && apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata
             apt update && apt install -y libomp-dev libopencv-dev python3-opencv
             ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
@@ -259,7 +259,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            export TZ=Europe/Berlin
             apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata libomp-dev libopencv-dev python3-opencv
             ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
@@ -272,7 +272,7 @@ jobs:
         run: docker exec build-container bash -c "$SCRIPT"
 
   TestTransfer:
-    needs: [ DeployMnistCalcArtifact , TrainOperator_MnistCalculator, TestMnistWithAdaNet, TrainTensorflowONNX, TrainHexadecimal_MnistCalculatorTL, TestGluonONNX, TrainHexadecimal_MnistCalculator, DeployDecompositionResNetArtifact, TestMNISTwithCustomLayer, TestTENSORFLOW, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TestMavenStreamtestPlugin]
+    needs: [ DeployMnistCalcArtifact , TestGluonONNX, TrainHexadecimal_MnistCalculatorTL, TestEMADLMavenPlugin, TestMNISTwithCustomLayer, TrainTensorflowONNX, TestMavenStreamtestPlugin, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TrainOperator_MnistCalculator, TestTENSORFLOW, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculatorTL]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -298,7 +298,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            export TZ=Europe/Berlin
             apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata libomp-dev libopencv-dev python3-opencv
             ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
@@ -338,7 +338,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
             cd AdaNet
             mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
@@ -373,7 +373,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            shopt -s expand_aliases
             echo 'alias python='\''/usr/bin/python3'\''' >> ~/.bashrc
             . ~/.bashrc
@@ -422,7 +422,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            cd onnx/tensorflow-pretrained
             mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
             mvn dependency:resolve emadl:train -s settings.xml
@@ -470,7 +470,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
             python3 -m pip install -U pip
             python3 -m pip install scikit-image
@@ -548,7 +548,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            export TZ=Europe/Berlin
             apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata libomp-dev libopencv-dev python3-opencv
             ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
@@ -588,7 +588,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            cd "emadl-maven_hexadecimal_calculator"
             python3 -m pip install -U pip
             python3 -m pip install scikit-image
@@ -627,7 +627,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            cd "emadl-maven_hexadecimal_calculator_transfer_learning"
             python3 -m pip install -U pip
             python3 -m pip install scikit-image
@@ -667,7 +667,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            cd "emadl-maven_operator_calculator"
             python3 -m pip install -U pip
             python3 -m pip install scikit-image
@@ -705,7 +705,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
             source ~/.bashrc            cd "emadl-maven_operator_calculator_transfer_learning"
             python3 -m pip install -U pip
             python3 -m pip install scikit-image
