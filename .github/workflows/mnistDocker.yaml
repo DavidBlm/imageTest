@@ -74,12 +74,11 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            python3 -m pip install -U pip
+            python3 -m pip install -U pip
             python3 -m pip install scikit-image
             python3 -m pip install opencv-python
             cd mnist-calculator
-            mvn streamtest:streamtest-build -s settings.xml
+            mvn streamtest:streamtest-build  -s settings.xml -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
         run: docker exec build-container bash -c "$SCRIPT"
 
   TestEMADLMavenPlugin:
@@ -110,12 +109,11 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            cd emadl-maven-plugin
+            cd emadl-maven-plugin
             python3 -m pip install -U pip
             python3 -m pip install scikit-image
             python3 -m pip install opencv-python
-            mvn dependency:resolve emadl:train -s settings.xml -U
+            mvn dependency:resolve emadl:train -s settings.xml -U -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
             mkdir output
             python3 calculator.py
         run: docker exec build-container bash -c "$SCRIPT"
@@ -155,13 +153,12 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            apt update && apt install -y libomp-dev
+            apt update && apt install -y libomp-dev
             cd mnist-modular/Streamtest
             python3 -m pip install -U pip
             python3 -m pip install scikit-image
             python3 -m pip install opencv-python
-            mvn dependency:resolve emadl:train -s settings.xml -U
+            mvn dependency:resolve emadl:train -s settings.xml -U -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
             mkdir output
             python3 calculator.py
         run: docker exec build-container bash -c "$SCRIPT"
@@ -201,8 +198,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            export TZ=Europe/Berlin && apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata
+            export TZ=Europe/Berlin && apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata
             apt update && apt install -y libomp-dev libopencv-dev python3-opencv
             ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
             dpkg-reconfigure --frontend noninteractive tzdata
@@ -211,7 +207,7 @@ jobs:
             python3 -m pip install opencv-python
             ln /usr/bin/python3 /usr/bin/python -f
             cd mnist-modular/Streamtest
-            mvn dependency:resolve -s settings.xml -U
+            mvn dependency:resolve -s settings.xml -U -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
             cd ../Decomposition
             ./runDecomposition.sh
             STATUS=$?
@@ -259,8 +255,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            export TZ=Europe/Berlin
+            export TZ=Europe/Berlin
             apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata libomp-dev libopencv-dev python3-opencv
             ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
             dpkg-reconfigure --frontend noninteractive tzdata
@@ -268,7 +263,7 @@ jobs:
             python3 -m pip install scikit-image opencv-python
             ln -fs /usr/bin/python3 /usr/bin/python
             cd mnist-modular/DecompositionResNet
-            mvn dependency:resolve emadl:train -s settings.xml -U
+            mvn dependency:resolve emadl:train -s settings.xml -U -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
         run: docker exec build-container bash -c "$SCRIPT"
 
   TestTransfer:
@@ -298,8 +293,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            export TZ=Europe/Berlin
+            export TZ=Europe/Berlin
             apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata libomp-dev libopencv-dev python3-opencv
             ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
             dpkg-reconfigure --frontend noninteractive tzdata
@@ -338,11 +332,10 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
+            mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
             cd AdaNet
             mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
-            mvn dependency:resolve emadl:train -s settings.xml
+            mvn dependency:resolve emadl:train -s settings.xml -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
         run: docker exec build-container bash -c "$SCRIPT"
 
   TestMNISTwithCustomLayer:
@@ -373,8 +366,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            shopt -s expand_aliases
+            shopt -s expand_aliases
             echo 'alias python='\''/usr/bin/python3'\''' >> ~/.bashrc
             . ~/.bashrc
             cat ~/.bashrc
@@ -391,7 +383,7 @@ jobs:
             mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
             cd mnist-custom-layer
             mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
-            mvn dependency:resolve emadl:train -s settings.xml
+            mvn dependency:resolve emadl:train -s settings.xml -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
         run: docker exec build-container bash -c "$SCRIPT"
 
   TrainTensorflowONNX:
@@ -422,10 +414,9 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            cd onnx/tensorflow-pretrained
+            cd onnx/tensorflow-pretrained
             mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
-            mvn dependency:resolve emadl:train -s settings.xml
+            mvn dependency:resolve emadl:train -s settings.xml -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
         run: docker exec build-container bash -c "$SCRIPT"
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -470,8 +461,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
+            mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
             python3 -m pip install -U pip
             python3 -m pip install scikit-image
             python3 -m pip install opencv-python
@@ -481,10 +471,10 @@ jobs:
             python3 -m pip install opencv-python
             ls model/cNNCalculator.Network/
             mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
-            mvn emadl:install-pretrained -e -s ./settings.xml
+            mvn emadl:install-pretrained -e -s ./settings.xml -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
             cd ../gluon-load
             mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
-            mvn emadl:train -s settings.xml
+            mvn emadl:train -s settings.xml -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
             chmod +x build.sh
             ./build.sh
             RES=$(./build/src/cpp/DigitCalculator resources/images/1.png resources/images/2.png resources/images/3.png resources/images/4.png resources/images/5.png resources/images/6.png)
@@ -548,8 +538,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            export TZ=Europe/Berlin
+            export TZ=Europe/Berlin
             apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata libomp-dev libopencv-dev python3-opencv
             ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
             dpkg-reconfigure --frontend noninteractive tzdata
@@ -557,8 +546,8 @@ jobs:
             python3 -m pip install scikit-image opencv-python
             ln -fs /usr/bin/python3 /usr/bin/python
             cd mnist-modular/DecompositionResNetExport
-            mvn dependency:resolve -s settings.xml -U -f pom_build.xml
-            mvn emadl:train -s settings.xml -U -f pom_build.xml
+            mvn dependency:resolve -s settings.xml -U -f pom_build.xml -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mvn emadl:train -s settings.xml -U -f pom_build.xml -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
         run: docker exec build-container bash -c "$SCRIPT"
 
   TrainHexadecimal_MnistCalculator:
@@ -588,8 +577,7 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            cd "emadl-maven_hexadecimal_calculator"
+            cd "emadl-maven_hexadecimal_calculator"
             python3 -m pip install -U pip
             python3 -m pip install scikit-image
             python3 -m pip install opencv-python
@@ -597,7 +585,7 @@ jobs:
             cd src/main/emadl/calculator
             ls
             cd ../../../..
-            mvn dependency:resolve emadl:train -s settings.xml -U
+            mvn dependency:resolve emadl:train -s settings.xml -U -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
         run: docker exec build-container bash -c "$SCRIPT"
 
   TrainHexadecimal_MnistCalculatorTL:
@@ -627,15 +615,14 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            cd "emadl-maven_hexadecimal_calculator_transfer_learning"
+            cd "emadl-maven_hexadecimal_calculator_transfer_learning"
             python3 -m pip install -U pip
             python3 -m pip install scikit-image
             python3 -m pip install opencv-python
             echo "$PWD"
-            mvn dependency:resolve  -s settings.xml -U
-            mvn clean verify -s settings.xml -U
-            mvn emadl:train -s settings.xml -U
+            mvn dependency:resolve  -s settings.xml -U -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mvn clean verify -s settings.xml -U -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mvn emadl:train -s settings.xml -U -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
             mkdir output
             python3 calculator.py
         run: docker exec build-container bash -c "$SCRIPT"
@@ -667,13 +654,12 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            cd "emadl-maven_operator_calculator"
+            cd "emadl-maven_operator_calculator"
             python3 -m pip install -U pip
             python3 -m pip install scikit-image
             python3 -m pip install opencv-python
             echo "$PWD"
-            mvn dependency:resolve emadl:train -s settings.xml -U
+            mvn dependency:resolve emadl:train -s settings.xml -U -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
             mkdir output
             python3 calculator.py
         run: docker exec build-container bash -c "$SCRIPT"
@@ -705,15 +691,14 @@ jobs:
         env:
           SCRIPT: |
             cd /workspace
-            export MAVEN_OPTS = "-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000"
-            source ~/.bashrc            cd "emadl-maven_operator_calculator_transfer_learning"
+            cd "emadl-maven_operator_calculator_transfer_learning"
             python3 -m pip install -U pip
             python3 -m pip install scikit-image
             python3 -m pip install opencv-python
             echo "$PWD"
-            mvn dependency:resolve  -s settings.xml -U
-            mvn clean verify -s settings.xml -U
-            mvn emadl:train -s settings.xml -U
+            mvn dependency:resolve  -s settings.xml -U -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mvn clean verify -s settings.xml -U -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mvn emadl:train -s settings.xml -U -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
             mkdir output
             python3 calculator.py
         run: docker exec build-container bash -c "$SCRIPT"
