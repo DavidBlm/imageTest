@@ -730,17 +730,6 @@ jobs:
            (cd "$dir" && cat train_* > train.h5)
            echo "Created train.h5 in $dir"
            done
-      - name: Build
-        env:
-          #mvn clean install -Dmaven.wagon.http.retryHandler.count=5
-          SCRIPT: |
-                  cd /workspace
-                  pwd
-                  ls
-                  cd repo
-                  python3 -m pip install -U pip 
-                  pip list
-        run: docker exec build-container bash -c "$SCRIPT"
       - uses: addnab/docker-run-action@v3
         with:
           image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
