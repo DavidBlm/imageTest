@@ -783,7 +783,7 @@ jobs:
                 cd mnist-custom-layer
                 mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
                 mvn dependency:resolve emadl:train -s settings.xml
-  TestMNISTwithCustomLayerManual:
+  _TestMNISTwithCustomLayerManual:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
