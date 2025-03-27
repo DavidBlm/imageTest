@@ -3,7 +3,6 @@ defaults:
   run:
     shell: bash
 on:
-  push:
   workflow_dispatch:
 concurrency:
   group: "${{ github.ref }}"

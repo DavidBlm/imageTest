@@ -1,6 +1,5 @@
 name: updatedImages
 on:
-  push:
   workflow_dispatch:
 concurrency:
   group: "${{ github.ref }}"
