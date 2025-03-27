@@ -126,7 +126,7 @@ jobs:
             emadl-maven-plugin/output/*
 
   TestModularModels:
-    needs: [ DeployMnistCalcArtifact , TestMNISTwithCustomLayer, TestEMADLMavenPlugin, TestGluonONNX, TrainOperator_MnistCalculatorTL, TrainTensorflowONNX, TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculatorTL, DeployDecompositionResNetArtifact, TestTENSORFLOW, TrainOperator_MnistCalculator, TestMnistWithAdaNet, TrainHexadecimal_MnistCalculator]
+    needs: [ DeployMnistCalcArtifact , TestMavenStreamtestPlugin, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TestGluonONNX, DeployDecompositionResNetArtifact, TestTENSORFLOW, TrainOperator_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainHexadecimal_MnistCalculatorTL, TrainOperator_MnistCalculator, TestMnistWithAdaNet, TestEMADLMavenPlugin]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -171,7 +171,7 @@ jobs:
             mnist-modular/Streamtest/output/*
 
   TestDecomposition:
-    needs: [ DeployMnistCalcArtifact , TestMNISTwithCustomLayer, TestEMADLMavenPlugin, TestGluonONNX, TrainOperator_MnistCalculatorTL, TrainTensorflowONNX, TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculatorTL, DeployDecompositionResNetArtifact, TestTENSORFLOW, TrainOperator_MnistCalculator, TestMnistWithAdaNet, TrainHexadecimal_MnistCalculator]
+    needs: [ DeployMnistCalcArtifact , TestMavenStreamtestPlugin, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TestGluonONNX, DeployDecompositionResNetArtifact, TestTENSORFLOW, TrainOperator_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainHexadecimal_MnistCalculatorTL, TrainOperator_MnistCalculator, TestMnistWithAdaNet, TestEMADLMavenPlugin]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -266,7 +266,7 @@ jobs:
         run: docker exec build-container bash -c "$SCRIPT"
 
   TestTransfer:
-    needs: [ DeployMnistCalcArtifact , TestMNISTwithCustomLayer, TestEMADLMavenPlugin, TestGluonONNX, TrainOperator_MnistCalculatorTL, TrainTensorflowONNX, TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculatorTL, DeployDecompositionResNetArtifact, TestTENSORFLOW, TrainOperator_MnistCalculator, TestMnistWithAdaNet, TrainHexadecimal_MnistCalculator]
+    needs: [ DeployMnistCalcArtifact , TestMavenStreamtestPlugin, TrainTensorflowONNX, TrainHexadecimal_MnistCalculator, TestGluonONNX, DeployDecompositionResNetArtifact, TestTENSORFLOW, TrainOperator_MnistCalculatorTL, TestMNISTwithCustomLayer, TrainHexadecimal_MnistCalculatorTL, TrainOperator_MnistCalculator, TestMnistWithAdaNet, TestEMADLMavenPlugin]
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -502,7 +502,6 @@ jobs:
           done
       - name: Script
         run: |
-          cd repo
           cd "emadl-maven_hexadecimal_calculator/trained_mnist_calc"
 
   DeployDecompositionResNetArtifact:
