@@ -730,11 +730,6 @@ jobs:
            (cd "$dir" && cat train_* > train.h5)
            echo "Created train.h5 in $dir"
            done
-          
-      - name: Start Docker Container
-        run: |
-             docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
-             docker run --network=host --name build-container -d -v $(pwd)/repo:/workspace -e GitlabToken="${{ secrets.GitlabToken }}" -e URL="${{ secrets.URL }}" -e ID="${{ secrets.ID }}" registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null 
       - name: Build
         env:
           #mvn clean install -Dmaven.wagon.http.retryHandler.count=5
@@ -749,7 +744,7 @@ jobs:
       - uses: addnab/docker-run-action@v3
         with:
           image: registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
-          options: -v ${{ github.workspace }}/repo:/workspace -e
+          options: -v ${{ github.workspace }}/repo:/workspace
           run: |
                   cd /workspace
                   pwd
