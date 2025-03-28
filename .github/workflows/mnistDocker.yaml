@@ -120,7 +120,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: "${ github.job }"
+          name: ${{ github.job }}
           retention-days: 7
           path: |
             emadl-maven-plugin/output/*
@@ -165,7 +165,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: "${ github.job }"
+          name: ${{ github.job }}
           retention-days: 7
           path: |
             mnist-modular/Streamtest/output/*
@@ -216,7 +216,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: "${ github.job }"
+          name: ${{ github.job }}
           retention-days: 7
           path: |
             mnist-modular/Streamtest/output/*
@@ -421,7 +421,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: "${ github.job }"
+          name: ${{ github.job }}
           retention-days: 7
           path: |
             onnx/tensorflow-pretrained/model/
