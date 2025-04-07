@@ -1,0 +1,565 @@
+name: converterNoLargeFiles
+on:
+  push:
+  workflow_dispatch:
+concurrency:
+  group: "${{ github.ref }}"
+  cancel-in-progress: true
+env:
+  GitlabToken : ${{ secrets.GitlabToken }}
+  URL : ${{ secrets.URL }}
+  ID : ${{ secrets.ID }}
+jobs:
+  TestTENSORFLOW:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/modular_testing'
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/tensorflow
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/tensorflow tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            cd tensorflow
+            chmod +x build.sh
+            ./build.sh
+            RES=$(./build/src/cpp/DigitCalculator resources/images/1.png resources/images/2.png resources/images/3.png resources/images/4.png resources/images/5.png resources/images/6.png)
+            if [[ $RES != *"SUM: 579"* ]]; then echo "Wrong result:" $RES; exit 1; fi;
+        run: docker exec build-container bash -c "$SCRIPT"
+
+  TestMavenStreamtestPlugin:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/modular_testing'
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            python3 -m pip install -U pip
+            python3 -m pip install scikit-image
+            python3 -m pip install opencv-python
+            cd mnist-calculator
+            mvn streamtest:streamtest-build -s settings.xml-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+        run: docker exec build-container bash -c "$SCRIPT"
+
+  TestEMADLMavenPlugin:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/modular_testing'
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            cd emadl-maven-plugin
+            python3 -m pip install -U pip
+            python3 -m pip install scikit-image
+            python3 -m pip install opencv-python
+            mvn dependency:resolve emadl:train -s settings.xml -U-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mkdir output
+            python3 calculator.py
+        run: docker exec build-container bash -c "$SCRIPT"
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: TestEMADLMavenPlugin
+          retention-days: 7
+          path: |
+            emadl-maven-plugin/output/*
+
+  TestModularModels:
+    needs: [ DeployMnistCalcArtifact , TrainTensorflowONNX, TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculatorTL, TestGluonONNX, TestTENSORFLOW, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestMNISTwithCustomLayer]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            apt update && apt install -y libomp-dev
+            cd mnist-modular/Streamtest
+            python3 -m pip install -U pip
+            python3 -m pip install scikit-image
+            python3 -m pip install opencv-python
+            mvn dependency:resolve emadl:train -s settings.xml -U-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mkdir output
+            python3 calculator.py
+        run: docker exec build-container bash -c "$SCRIPT"
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: TestModularModels
+          retention-days: 7
+          path: |
+            mnist-modular/Streamtest/output/*
+
+  TestDecomposition:
+    needs: [ DeployMnistCalcArtifact , TrainTensorflowONNX, TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculatorTL, TestGluonONNX, TestTENSORFLOW, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestMNISTwithCustomLayer]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            export TZ=Europe/Berlin && apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata
+            apt update && apt install -y libomp-dev libopencv-dev python3-opencv
+            ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+            dpkg-reconfigure --frontend noninteractive tzdata
+            python3 -m pip install -U pip
+            python3 -m pip install scikit-image
+            python3 -m pip install opencv-python
+            ln /usr/bin/python3 /usr/bin/python -f
+            cd mnist-modular/Streamtest
+            mvn dependency:resolve -s settings.xml -U-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            cd ../Decomposition
+            ./runDecomposition.sh
+            STATUS=$?
+            if [[ $STATUS -eq 1 ]]; then echo "Error during decomposition." $RES; exit 1; fi;
+        run: docker exec build-container bash -c "$SCRIPT"
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: TestDecomposition
+          retention-days: 7
+          path: |
+            mnist-modular/Streamtest/output/*
+
+  TestDecompositionResNet:
+    needs: TestEMADLMavenPlugin
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: TestEMADLMavenPlugin
+          path: |
+            emadl-maven-plugin/output/*
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            export TZ=Europe/Berlin
+            apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata libomp-dev libopencv-dev python3-opencv
+            ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+            dpkg-reconfigure --frontend noninteractive tzdata
+            python3 -m pip install --upgrade pip
+            python3 -m pip install scikit-image opencv-python
+            ln -fs /usr/bin/python3 /usr/bin/python
+            cd mnist-modular/DecompositionResNet
+            mvn dependency:resolve emadl:train -s settings.xml -U-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+        run: docker exec build-container bash -c "$SCRIPT"
+
+  TestTransfer:
+    needs: [ DeployMnistCalcArtifact , TrainTensorflowONNX, TestMavenStreamtestPlugin, TrainHexadecimal_MnistCalculatorTL, TestGluonONNX, TestTENSORFLOW, TrainOperator_MnistCalculator, TrainHexadecimal_MnistCalculator, TrainOperator_MnistCalculatorTL, TestEMADLMavenPlugin, TestMnistWithAdaNet, DeployDecompositionResNetArtifact, TestMNISTwithCustomLayer]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            export TZ=Europe/Berlin
+            apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata libomp-dev libopencv-dev python3-opencv
+            ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+            dpkg-reconfigure --frontend noninteractive tzdata
+            python3 -m pip install -U pip scikit-image opencv-python
+            ln -fs /usr/bin/python3 /usr/bin/python
+            cd transfer
+            chmod +x runTransfer.sh
+            ./runTransfer.sh
+        run: docker exec build-container bash -c "$SCRIPT"
+
+  TestMnistWithAdaNet:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/modular_testing'
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
+            cd AdaNet
+            mvn dependency:resolve emadl:train -s settings.xml-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+        run: docker exec build-container bash -c "$SCRIPT"
+
+  TestMNISTwithCustomLayer:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/modular_testing'
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            shopt -s expand_aliases
+            echo 'alias python='\''/usr/bin/python3'\''' >> ~/.bashrc
+            . ~/.bashrc
+            cat ~/.bashrc
+            echo $PYTHONPATH
+            python --version
+            python3 --version
+            which python
+            which python3
+            alias python=/usr/bin/python3
+            python --version
+            python3 --version
+            which python
+            type -a python
+            mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
+            cd mnist-custom-layer
+            mvn dependency:resolve emadl:train -s settings.xml-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+        run: docker exec build-container bash -c "$SCRIPT"
+
+  TrainTensorflowONNX:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/modular_testing'
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/tensorflow-onnx:latest
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/tensorflow-onnx:latest tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            cd onnx/tensorflow-pretrained
+            mvn dependency:resolve emadl:train -s settings.xml-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+        run: docker exec build-container bash -c "$SCRIPT"
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: TrainTensorflowONNX
+          retention-days: 7
+          path: |
+            onnx/tensorflow-pretrained/model/
+
+  TestGluonONNX:
+    needs: TrainTensorflowONNX
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/modular_testing'
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: TrainTensorflowONNX
+          path: |
+            onnx/tensorflow-pretrained/model/
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170-onnx:v0.0.1
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170-onnx:v0.0.1 tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
+            python3 -m pip install -U pip
+            python3 -m pip install scikit-image
+            python3 -m pip install opencv-python
+            cd onnx/tensorflow-pretrained
+            python3 -m pip install -U pip
+            python3 -m pip install scikit-image
+            python3 -m pip install opencv-python
+            ls model/cNNCalculator.Network/
+            mvn emadl:install-pretrained -e -s ./settings.xml-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            cd ../gluon-load
+            mvn emadl:train -s settings.xml-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            chmod +x build.sh
+            ./build.sh
+            RES=$(./build/src/cpp/DigitCalculator resources/images/1.png resources/images/2.png resources/images/3.png resources/images/4.png resources/images/5.png resources/images/6.png)
+            if [[ $RES != *"SUM: 579"* ]]; then echo "Wrong result:" $RES; exit 1; fi;
+        run: docker exec build-container bash -c "$SCRIPT"
+
+  DeployMnistCalcArtifact:
+    runs-on: ubuntu-latest
+    container:
+      image: maven:3.6-jdk-8
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Script
+        run: |
+          cd "emadl-maven_hexadecimal_calculator/trained_mnist_calc"
+          mvn deploy -s ci_settings.xml-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+
+  DeployDecompositionResNetArtifact:
+    needs: TestEMADLMavenPlugin
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: TestEMADLMavenPlugin
+          path: |
+            emadl-maven-plugin/output/*
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            export TZ=Europe/Berlin
+            apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata libomp-dev libopencv-dev python3-opencv
+            ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+            dpkg-reconfigure --frontend noninteractive tzdata
+            python3 -m pip install --upgrade pip
+            python3 -m pip install scikit-image opencv-python
+            ln -fs /usr/bin/python3 /usr/bin/python
+            cd mnist-modular/DecompositionResNetExport
+            mvn dependency:resolve -s settings.xml -U -f pom_build.xml-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mvn emadl:train -s settings.xml -U -f pom_build.xml-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mvn deploy -s settings.xml -U -f pom_deploy.xml-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+        run: docker exec build-container bash -c "$SCRIPT"
+
+  TrainHexadecimal_MnistCalculator:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            cd "emadl-maven_hexadecimal_calculator"
+            python3 -m pip install -U pip
+            python3 -m pip install scikit-image
+            python3 -m pip install opencv-python
+            echo "$PWD"
+            cd src/main/emadl/calculator
+            ls
+            cd ../../../..
+            mvn dependency:resolve emadl:train -s settings.xml -U-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+        run: docker exec build-container bash -c "$SCRIPT"
+
+  TrainHexadecimal_MnistCalculatorTL:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            cd "emadl-maven_hexadecimal_calculator_transfer_learning"
+            python3 -m pip install -U pip
+            python3 -m pip install scikit-image
+            python3 -m pip install opencv-python
+            echo "$PWD"
+            mvn dependency:resolve  -s settings.xml -U-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mvn clean verify -s settings.xml -U-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mvn emadl:train -s settings.xml -U-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mkdir output
+            python3 calculator.py
+        run: docker exec build-container bash -c "$SCRIPT"
+
+  TrainOperator_MnistCalculator:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            cd "emadl-maven_operator_calculator"
+            python3 -m pip install -U pip
+            python3 -m pip install scikit-image
+            python3 -m pip install opencv-python
+            echo "$PWD"
+            mvn dependency:resolve emadl:train -s settings.xml -U-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mkdir output
+            python3 calculator.py
+        run: docker exec build-container bash -c "$SCRIPT"
+
+  TrainOperator_MnistCalculatorTL:
+    needs: DeployMnistCalcArtifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout latest commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          repository: DavidBlm/MNISTPipeline
+          token: ${{ secrets.ACCESS_TOKEN }}
+      - name: Start Docker Container
+        run: |
+          docker pull registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2
+          docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/mxnet/190:v0.0.2 tail -f /dev/null
+      - name: Script
+        env:
+          SCRIPT: |
+            cd /workspace
+            cd "emadl-maven_operator_calculator_transfer_learning"
+            python3 -m pip install -U pip
+            python3 -m pip install scikit-image
+            python3 -m pip install opencv-python
+            echo "$PWD"
+            mvn dependency:resolve  -s settings.xml -U-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mvn clean verify -s settings.xml -U-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mvn emadl:train -s settings.xml -U-Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
+            mkdir output
+            python3 calculator.py
+        run: docker exec build-container bash -c "$SCRIPT"
+
