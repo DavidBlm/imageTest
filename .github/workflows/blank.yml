@@ -333,7 +333,8 @@ jobs:
             cd /workspace
             mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
             cd AdaNet
-            mvn dependency:resolve emadl:train -s settings.xml -Dmaven.wagon.http.retryHandler.count=100 -Dmaven.wagon.http.connectionTimeout=600000000 -Dmaven.wagon.http.readTimeout=600000000
+            mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
+            mvn dependency:resolve emadl:train -s settings.xml -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
         run: docker exec build-container bash -c "$SCRIPT"
 
   TestMNISTwithCustomLayer:
