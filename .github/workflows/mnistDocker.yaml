@@ -329,11 +329,11 @@ jobs:
           docker run --name build-container -d -v $(pwd):/workspace --network=host  -e GitlabToken=${{ secrets.GitlabToken }} -e URL=${{ secrets.URL }} -e ID=${{ secrets.ID }} registry.git.rwth-aachen.de/monticore/embeddedmontiarc/generators/emadl2cpp/dockerimages/mxnet170:v0.0.1 tail -f /dev/null
       - name: Script
         env:
+          #mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
           SCRIPT: |
             cd /workspace
             mv /mxnet/build/libmxnet.so /mxnet/build/libmxnet.a /usr/lib/
             cd AdaNet
-            mvn install:install-file -DgroupId=net.sourceforge -DartifactId=javaml -Dversion=0.1.7 -Dpackaging=jar -Dfile=./javaml-0.1.7.jar
             mvn dependency:resolve emadl:train -s settings.xml -Dmaven.wagon.http.retryHandler.count=30 -Dmaven.wagon.http.connectionTimeout=6000000 -Dmaven.wagon.http.readTimeout=6000000
         run: docker exec build-container bash -c "$SCRIPT"
 
