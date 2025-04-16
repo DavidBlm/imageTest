@@ -3,9 +3,6 @@ name: Migrate Selected Docker Images
 on:
   workflow_dispatch:
     inputs:
-      gitlab_registry:
-        description: 'Private GitLab Registry URL (e.g., registry.example.com)'
-        required: true
       gitlab_repo:
         description: 'GitLab Repository (e.g., namespace/repo)'
         required: true
@@ -20,10 +17,10 @@ jobs:
     steps:
       - name: Log in to Private GitLab Docker Registry
         run: |
-            docker login https://git.rwth-aachen.de/ -u David.Blum -p "$GITLABTOKEN"
+          docker login https://git.rwth-aachen.de/ -u "$GITLAB_USERNAME" -p "$GITLABTOKEN"
         env:
-            GITLAB_USERNAME: David.Blum
-            GITLAB_PASSWORD: ${{ secrets.GITLABTOKEN }}
+          GITLAB_USERNAME: David.Blum
+          GITLABTOKEN: ${{ secrets.GITLABTOKEN }}
 
       - name: Log in to GitHub Container Registry (GHCR)
         run: |
@@ -36,7 +33,7 @@ jobs:
         run: |
           IFS=',' read -ra IMAGES <<< "${{ github.event.inputs.images_list }}"
           for IMAGE in "${IMAGES[@]}"; do
-            GITLAB_IMAGE="${{ github.event.inputs.gitlab_registry }}/${{ github.event.inputs.gitlab_repo }}/$IMAGE"
+            GITLAB_IMAGE="git.rwth-aachen.de/${{ github.event.inputs.gitlab_repo }}/$IMAGE"
             GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/$IMAGE"
 
             echo "Pulling image from GitLab: $GITLAB_IMAGE"
