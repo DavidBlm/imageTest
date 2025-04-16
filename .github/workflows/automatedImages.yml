@@ -7,7 +7,7 @@ jobs:
     env:
       GITLAB_USERNAME: "David.Blum"
       GITLABTOKEN: ${{ secrets.GITLABTOKEN }}
-      GITLAB_REPO: "monticore/EmbeddedMontiArc/applicationsMNISTCalculator"
+      GITLAB_REPO: "monticore/embeddedmontiarc/applicationsmnistcalculator"
       IMAGES_LIST: "mxnet,caffe2,tensorflow,mxnet/run"
       GHCR_PAT: ${{ secrets.GHCR_PAT }}
       GHCR_REPO_OWNER: "davidblm"
