@@ -1,5 +1,6 @@
 name: Migrate Docker Images
-on: workflow_dispatch:
+on: 
+  workflow_dispatch:
 jobs:
   docker-migration:
     runs-on: ubuntu-latest
