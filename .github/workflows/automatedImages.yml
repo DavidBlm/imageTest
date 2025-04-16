@@ -1,0 +1,33 @@
+name: Migrate Docker Images
+on: workflow_dispatch:
+jobs:
+  docker-migration:
+    runs-on: ubuntu-latest
+    env:
+      GITLAB_USERNAME: "David.Blum"
+      GITLABTOKEN: ${{ secrets.GITLABTOKEN }}
+      GITLAB_REPO: "monticore/EmbeddedMontiArc/applicationsMNISTCalculator"
+      IMAGES_LIST: "mxnet,caffe2,tensorflow,mxnet/run"
+      GHCR_PAT: ${{ secrets.GHCR_PAT }}
+      GHCR_REPO_OWNER: "davidblm"
+    steps:
+      - name: Log in to GitLab
+        run: |
+          docker login https://git.rwth-aachen.de/ -u "$GITLAB_USERNAME" -p "$GITLABTOKEN"
+      - name: Log in to GitHub
+        run: |
+          echo "$GHCR_PAT" | docker login ghcr.io -u "$GHCR_REPO_OWNER" --password-stdin
+      - name: Migrate Docker images
+        run: |
+          IFS="," read -ra IMAGES <<< "$IMAGES_LIST"
+          for IMAGE in "${IMAGES[@]}"; do
+            GITLAB_IMAGE="registry.git.rwth-aachen.de/$GITLAB_REPO/$IMAGE"
+            LOWERCASE_IMAGE=$(echo "$IMAGE" | tr "[:upper:]" "[:lower:]")
+            GHCR_IMAGE="ghcr.io/$GHCR_REPO_OWNER/$LOWERCASE_IMAGE"
+            echo "Pulling image from GitLab: $GITLAB_IMAGE"
+            docker pull "$GITLAB_IMAGE"
+            echo "Tagging image for GHCR: $GHCR_IMAGE"
+            docker tag "$GITLAB_IMAGE" "$GHCR_IMAGE"
+            echo "Pushing image to GHCR: $GHCR_IMAGE"
+            docker push "$GHCR_IMAGE"
+          done
