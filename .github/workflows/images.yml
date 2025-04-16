@@ -30,9 +30,15 @@ jobs:
         run: |
           IFS=',' read -ra IMAGES <<< "${{ github.event.inputs.images_list }}"
           for IMAGE in "${IMAGES[@]}"; do
-            GITLAB_IMAGE="registry.git.rwth-aachen.de/${{ github.event.inputs.gitlab_repo }}/$IMAGE"
-            LOWERCASE_IMAGE=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]') # Convert to lowercase
-            GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/$LOWERCASE_IMAGE"
+            # Define the source image in GitLab
+            GITLAB_IMAGE="registry.git.rwth-aachen.de/monticore/embeddedmontiarc/applications/mnistcalculator/$IMAGE"
+      
+            # Convert the repository owner and image name to lowercase
+            LOWERCASE_REPO_OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+            LOWERCASE_IMAGE=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]')
+      
+            # Define the target image in GHCR
+            GHCR_IMAGE="ghcr.io/$LOWERCASE_REPO_OWNER/$LOWERCASE_IMAGE"
       
             echo "Pulling image from GitLab: $GITLAB_IMAGE"
             docker pull "$GITLAB_IMAGE"
@@ -43,4 +49,3 @@ jobs:
             echo "Pushing image to GHCR: $GHCR_IMAGE"
             docker push "$GHCR_IMAGE"
           done
-
