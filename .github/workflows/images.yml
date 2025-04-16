@@ -30,7 +30,7 @@ jobs:
         run: |
           IFS=',' read -ra IMAGES <<< "${{ github.event.inputs.images_list }}"
           for IMAGE in "${IMAGES[@]}"; do
-            GITLAB_IMAGE="git.rwth-aachen.de/${{ github.event.inputs.gitlab_repo }}/$IMAGE"
+            GITLAB_IMAGE="registry.git.rwth-aachen.de/${{ github.event.inputs.gitlab_repo }}/$IMAGE"
             LOWERCASE_IMAGE=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]') # Convert to lowercase
             GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/$LOWERCASE_IMAGE"
       
