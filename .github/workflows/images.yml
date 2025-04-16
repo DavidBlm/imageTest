@@ -18,12 +18,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Log in to Private GitLab Docker Registry
-        run: |
-          echo "$GITLABTOKEN" | docker login ${{ github.event.inputs.gitlab_registry }} -u David.Blum --password-stdin
-        env:
-          GITLAB_PASSWORD: ${{ secrets.GITLABTOKEN }}
-          GITLAB_USERNAME: David.Blum
+     - name: Log in to Private GitLab Docker Registry
+  run: |
+    docker login https://git.rwth-aachen.de/ -u David.Blum -p "$GITLABTOKEN"
+  env:
+    GITLAB_USERNAME: David.Blum
+    GITLAB_PASSWORD: ${{ secrets.GITLABTOKEN }}
+
 
       - name: Log in to GitHub Container Registry (GHCR)
         run: |
