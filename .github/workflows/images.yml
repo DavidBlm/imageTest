@@ -25,20 +25,22 @@ jobs:
       - name: Log in to GitHub Container Registry (GHCR) using GITHUB_TOKEN
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-
+      
       - name: Pull and Reupload Selected Docker Images
         run: |
           IFS=',' read -ra IMAGES <<< "${{ github.event.inputs.images_list }}"
           for IMAGE in "${IMAGES[@]}"; do
-            GITLAB_IMAGE="registry.git.rwth-aachen.de/${{ github.event.inputs.gitlab_repo }}/$IMAGE"
-            GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/$IMAGE"
-
+            GITLAB_IMAGE="git.rwth-aachen.de/${{ github.event.inputs.gitlab_repo }}/$IMAGE"
+            LOWERCASE_IMAGE=$(echo "$IMAGE" | tr '[:upper:]' '[:lower:]') # Convert to lowercase
+            GHCR_IMAGE="ghcr.io/${{ github.repository_owner }}/$LOWERCASE_IMAGE"
+      
             echo "Pulling image from GitLab: $GITLAB_IMAGE"
             docker pull "$GITLAB_IMAGE"
-
+      
             echo "Tagging image for GHCR: $GHCR_IMAGE"
             docker tag "$GITLAB_IMAGE" "$GHCR_IMAGE"
-
+      
             echo "Pushing image to GHCR: $GHCR_IMAGE"
             docker push "$GHCR_IMAGE"
           done
+
